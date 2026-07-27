@@ -1,0 +1,82 @@
+nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.logo,
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-icon,
+.close-menu-icon {
+  display: none;
+  cursor: pointer;
+}
+
+.logo span {
+  font-weight: 600;
+}
+
+.logo-circle {
+  width: 9px;
+  height: 9px;
+  box-shadow: rgba(232, 177, 85, 0.45) 0px 0px 10px 2px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 10px;
+  gap: 6px;
+}
+
+.user-status .status-circle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(95, 208, 138);
+}
+
+.user-profile-card {
+  padding: 5px 10px;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 760px) {
+  .menu-icon,
+  .close-menu-icon {
+    display: block;
+  }
+
+  .logo-circle {
+    display: none;
+  }
+}
