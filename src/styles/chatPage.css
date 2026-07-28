@@ -33,7 +33,7 @@ main {
 .msg-avatar {
   width: 28px;
   height: 28px;
-  border-radius: 5px;
+  border-radius: 6px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -41,7 +41,7 @@ main {
   margin-top: 2px;
 }
 
-.msg-row.bot .msg-avatar {
+.msg-row.assistant .msg-avatar {
   background: rgba(255, 255, 255, 0.06);
   color: var(--violet);
   border: 1px solid var(--border);
@@ -81,18 +81,115 @@ main {
   padding: 11px 14px;
   border-radius: 0 5px 5px 5px;
   font-size: 14px;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: pre-wrap;
+  display: block;
+  overflow-wrap: break-word;
+}
+
+.bubble.thinking{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .msg-row.user .bubble {
   border-left: none;
   border-right: 2px solid var(--accent);
   border-radius: 5px 0 5px 5px;
+  background: var(--bg-card);
+}
+
+.bubble p {
+  margin: 0 0 12px;
+}
+
+.bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.bubble h1,
+.bubble h2,
+.bubble h3,
+.bubble h4 {
+  margin: 18px 0 10px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.bubble h1 {
+  font-size: 24px;
+}
+
+.bubble h2 {
+  font-size: 20px;
+}
+
+.bubble h3 {
+  font-size: 17px;
+}
+
+.bubble ul,
+.bubble ol {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.bubble li {
+  margin: 5px 0;
+}
+
+.bubble code {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+}
+
+.bubble pre {
+  margin: 16px 0;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+}
+
+.bubble pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.bubble blockquote {
+  margin: 15px 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--accent-dim);
+  color: var(--text-secondary);
+}
+.bubble a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.bubble a:hover {
+  text-decoration: underline;
+}
+
+.bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.bubble th,
+.bubble td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  text-align: left;
+}
+
+.bubble th {
   background: var(--bg-card);
 }
 

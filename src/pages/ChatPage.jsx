@@ -15,6 +15,7 @@ import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
 import { formatMessageTime } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
+import MarkdownRenderer from "../components/MarkdownRenderer";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -98,7 +99,13 @@ function ChatPage() {
                     </span>
                     <span>{formatMessageTime(message.createdAt)}</span>
                   </div>
-                  <div className="bubble">{message.content}</div>
+                  <div className="bubble">
+                    {message.role === "assistant" ? (
+                      <MarkdownRenderer content={message.content} />
+                    ) : (
+                      message.content
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -110,7 +117,7 @@ function ChatPage() {
                     <span className="who">Nightline</span>
                     <span>Now</span>
                   </div>
-                  <div className="bubble">
+                  <div className="bubble thinking">
                     <ThinkingOrb state="searching" size={20} speed={1.15} />
                     Thinking...
                   </div>
@@ -129,6 +136,7 @@ function ChatPage() {
         setSending={setSending}
         setAnswering={setAnswering}
         sending={sending}
+        answering={answering}
       />
     </>
   );

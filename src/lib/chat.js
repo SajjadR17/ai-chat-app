@@ -12,9 +12,9 @@ import {
 
 import { db } from "../../firebase";
 
-export async function createConversation(uid, title) {
+export async function createConversation(uid) {
   const docRef = await addDoc(collection(db, "users", uid, "conversations"), {
-    title,
+    title: "New Chat",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -82,5 +82,11 @@ export async function getConversationHistory(uid, chatId) {
       role: data.role === "bot" ? "assistant" : "user",
       content: data.content,
     };
+  });
+}
+
+export async function updateConversationTitle(uid, chatId, title) {
+  await updateDoc(doc(db, "users", uid, "conversations", chatId), {
+    title,
   });
 }

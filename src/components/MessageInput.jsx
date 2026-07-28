@@ -7,11 +7,12 @@ import {
   createConversation,
   getConversationHistory,
   updateConversation,
+  updateConversationTitle,
 } from "../lib/chat";
 import { ClipLoader } from "react-spinners";
 import { askAI } from "../services/ai";
 
-function MessageInput({ sending, setAnswering, setSending }) {
+function MessageInput({ sending,answering, setAnswering, setSending }) {
   const { chatId } = useParams();
   const { user } = useAuth();
   const [message, setMessage] = useState("");
@@ -25,29 +26,40 @@ function MessageInput({ sending, setAnswering, setSending }) {
       let currentChatId = chatId;
 
       if (!currentChatId || currentChatId === "new") {
-        currentChatId = await createConversation(
-          user.uid,
-          message.trim().slice(0, 40),
-        );
+        currentChatId = await createConversation(user.uid);
       }
 
       await addMessage(user.uid, currentChatId, "user", message.trim());
       await updateConversation(user.uid, currentChatId);
-      const newChatId = currentChatId;
 
       setMessage("");
-
-      setAnswering(true);
-
       if (chatId === "new") {
-        navigate(`/chat/${newChatId}`, {
+        navigate(`/chat/${currentChatId}`, {
           replace: true,
         });
       }
 
+      setAnswering(true);
+
       const history = await getConversationHistory(user.uid, currentChatId);
-      const answer = await askAI(history);
-      await addMessage(user.uid, currentChatId, "assistant", answer);
+      const response = await askAI(message.trim(), history);
+
+      let data;
+
+      try {
+        data = JSON.parse(response);
+      } catch {
+        data = {
+          title: "New Conversation",
+          answer: response,
+        };
+      }
+
+      if (chatId === "new") {
+        await updateConversationTitle(user.uid, currentChatId, data.title);
+      }
+      await addMessage(user.uid, currentChatId, "assistant", data.answer);
+      setAnswering(false);
       await updateConversation(user.uid, currentChatId);
     } catch (err) {
       console.log(err);
@@ -58,7 +70,6 @@ function MessageInput({ sending, setAnswering, setSending }) {
         "Sorry, I couldn't generate a response.",
       );
     } finally {
-      setAnswering(false);
       setSending(false);
     }
   };
@@ -76,7 +87,7 @@ function MessageInput({ sending, setAnswering, setSending }) {
 
         <button
           type="submit"
-          disabled={message.trim().length === 0 || sending}
+          disabled={message.trim().length === 0 || sending || answering}
           className="send-btn"
           aria-label="Send message"
         >
