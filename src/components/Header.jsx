@@ -1,8 +1,10 @@
 import { BiMenu } from "react-icons/bi";
 import "../styles//header.css";
 import { IoClose } from "react-icons/io5";
+import { useAuth } from "../contexts/authContext";
 
-function Header({menuOpen,setMenuOpen}) {
+function Header({ menuOpen, setMenuOpen }) {
+  const { user, userProfile } = useAuth();
 
   return (
     <header>
@@ -31,7 +33,11 @@ function Header({menuOpen,setMenuOpen}) {
             <div className="status-circle"></div>
             <span className="badge-content">online</span>
           </div>
-          <div className="user-profile-card mono">SR</div>
+          {user && userProfile && (
+            <div className="user-profile-card mono">
+              {userProfile.shortName}
+            </div>
+          )}
         </div>
       </nav>
     </header>

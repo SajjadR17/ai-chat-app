@@ -1,0 +1,125 @@
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+}
+
+.auth-form {
+  position: relative;
+  width: 380px;
+  max-width: 90vw;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.auth-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.auth-title .auth-title-dot {
+  width: 9px;
+  height: 9px;
+  box-shadow: rgba(232, 177, 85, 0.45) 0px 0px 10px 2px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.auth-form h2 {
+  font-size: 22px;
+}
+
+.input-container {
+  margin-bottom: 15px;
+}
+
+.input-container label {
+  display: block;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.general-err-container{
+    margin-bottom: 25px;
+    font-size: 14px;
+    color: var(--accent);
+}
+
+.input-err {
+  display: block;
+  color: var(--accent-dim);
+  margin-top: 4px;
+}
+
+.input-container input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.input-container input:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.input-container input:focus {
+  border-color: var(--accent-dim);
+  background: var(--bg-hover);
+  outline: none;
+}
+
+.auth-btn {
+  width: 100%;
+  background: var(--accent);
+  color: #1a1406;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 6px;
+  transition:
+    filter 0.15s ease,
+    transform 0.05s ease;
+}
+
+.auth-btn:hover {
+  filter: brightness(1.08);
+}
+
+.auth-btn:active {
+  transform: scale(0.98);
+}
+
+.auth-form-quick-link{
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.auth-form-quick-link:hover{
+    transform: translateX(3px);
+}
+
+.auth-error {
+  display: none;
+  background: rgba(224, 102, 122, 0.1);
+  border: 1px solid rgba(224, 102, 122, 0.35);
+  color: var(--danger);
+  font-size: 12.5px;
+  padding: 9px 11px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
