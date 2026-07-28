@@ -240,7 +240,7 @@ main {
   }
 }
 
-@media (max-width: 480) {
+@media (max-width: 480px) {
   .msg-avatar {
     display: none;
   }

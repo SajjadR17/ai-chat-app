@@ -1,6 +1,6 @@
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-export async function askAI(message, history) {
+export async function askAI( history) {
   try {
     const response = await fetch(GROQ_URL, {
       method: "POST",

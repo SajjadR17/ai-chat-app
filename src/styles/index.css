@@ -106,7 +106,7 @@ ol {
 }
 
 .layout {
-  height: 100vh;
+  height: 100dvh;
   display: grid;
   grid-template-rows: 58px 1fr;
 }
