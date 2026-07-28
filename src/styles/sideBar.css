@@ -1,0 +1,118 @@
+aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--bg-secondary);
+  grid-area: sidebar;
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  min-height: 0;
+}
+
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 8px;
+  transition: border-color 0.15s ease;
+}
+
+.new-chat-btn:hover {
+  border-color: var(--accent-dim);
+}
+
+.conversations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.conversations-title {
+  color: var(--text-secondary);
+  margin-left: 5px;
+}
+
+.conversations-list {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
+  gap: 10px;
+  scrollbar-width: none;
+}
+
+.conversation-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border: 1px solid transparent;
+  position: relative;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.conversation-card:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.conversation-card.active {
+  background: var(--bg-hover);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.conversation-dot {
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-dim);
+}
+
+.conversation-name {
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.empty-conversations {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-height: 600px;
+}
+
+@media (max-width: 760px) {
+  aside {
+    position: fixed;
+    top: 58px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 40;
+  }
+
+  aside.open {
+    transform: translateX(0);
+  }
+}
