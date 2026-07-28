@@ -53,7 +53,7 @@ aside {
   display: flex;
   align-items: center;
   gap: 9px;
-  padding: 12px;
+  padding: 9px 10px;
   border-radius: 5px;
   color: var(--text-secondary);
   font-size: 13px;
@@ -100,7 +100,7 @@ aside {
   min-height: 600px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   aside {
     position: fixed;
     top: 58px;

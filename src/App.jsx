@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SideBar from "./components/SideBar";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,7 +32,7 @@ function App() {
             <main>
               <Routes>
                 <Route path="/" element={<Navigate to="/chat/new" replace />} />
-                <Route path="/chat/:chatId" element={null} />
+                <Route path="/chat/:chatId" element={<ChatPage />} />
               </Routes>
             </main>
           </div>

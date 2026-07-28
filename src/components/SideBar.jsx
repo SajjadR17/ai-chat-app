@@ -5,12 +5,15 @@ import "../styles/sideBar.css";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
-import { PiEmpty } from "react-icons/pi";
 import { FiMessageSquare } from "react-icons/fi";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function SideBar({ menuOpen }) {
   const [conversations, setConversations] = useState([]);
   const { user } = useAuth();
+  const location = useLocation();
+  const chatId = location.pathname.replace("/chat/", "");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) return;
@@ -25,33 +28,43 @@ function SideBar({ menuOpen }) {
       }));
 
       setConversations(chats);
+      if (
+        chatId &&
+        chatId !== "new" &&
+        !chats.some((chat) => chat.id === chatId)
+      ) {
+        navigate("/chat/new", { replace: true });
+      }
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, chatId, navigate]);
 
   return (
     <aside className={`${menuOpen ? "open" : ""}`}>
-      <button className="new-chat-btn">
+      <button className="new-chat-btn" onClick={() => navigate("/chat/new")}>
         <BiPlus />
         New chat
       </button>
       <div className="conversations">
         <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
-          {conversations.length === 0 ? (
+          {chatId === "new" && (
             <button className="conversation-card active">
               <div className="conversation-dot"></div>
               <span className="conversation-name">New chat</span>
             </button>
-          ) : (
-            conversations.map((chat) => (
-              <button key={chat.id} className="conversation-card">
-                <div className="conversation-dot"></div>
-                <span className="conversation-name">{chat.title}</span>
-              </button>
-            ))
           )}
+          {conversations.map((chat) => (
+            <button
+              key={chat.id}
+              onClick={() => navigate(`/chat/${chat.id}`)}
+              className={`conversation-card ${chatId === chat.id ? "active" : ""}`}
+            >
+              <div className="conversation-dot"></div>
+              <span className="conversation-name">{chat.title}</span>
+            </button>
+          ))}
         </div>
       </div>
     </aside>
