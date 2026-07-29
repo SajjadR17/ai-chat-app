@@ -17,6 +17,7 @@ import { formatMessageTime } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
+import { BiCopy } from "react-icons/bi";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -25,6 +26,7 @@ function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
+  const [copyId, setCopyId] = useState(null);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -79,6 +81,18 @@ function ChatPage() {
     });
   }, [messages]);
 
+  const copyMessage = async (id, text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyId(id);
+      setTimeout(() => {
+        setCopyId(null);
+      }, 2000);
+    } catch (err) {
+      console.log("Copy failed:", err);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-chat">
@@ -112,6 +126,12 @@ function ChatPage() {
                       {message.role === "assistant" ? "Nightline" : "You"}
                     </span>
                     <span>{formatMessageTime(message.createdAt)}</span>
+                    <button
+                      className="copy-msg-btn"
+                      onClick={() => copyMessage(message.id, message.content)}
+                    >
+                      {copyId === message.id ? "copied" : <BiCopy />}
+                    </button>
                   </div>
                   <div className="bubble">
                     <MarkdownRenderer content={message.content} />
@@ -135,7 +155,7 @@ function ChatPage() {
               </div>
             )}
             <button className="scroll-to-bottom" onClick={scrollToBottom}>
-              <BsArrowDown size={14}/>
+              <BsArrowDown size={14} />
             </button>
             <div ref={bottomRef}></div>
           </>

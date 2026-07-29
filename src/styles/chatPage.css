@@ -77,9 +77,17 @@ main {
 .msg-meta {
   display: flex;
   gap: 8px;
+  align-items: center;
   align-items: baseline;
   margin-bottom: 10px;
   color: var(--text-muted);
+}
+
+.copy-msg-btn{
+  background-color: transparent;
+  border: none;
+  color: var(--text-muted);
+  align-self: center;
 }
 
 .msg-row.user .msg-meta {
