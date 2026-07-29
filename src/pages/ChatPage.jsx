@@ -1,5 +1,5 @@
-import { LuSendHorizontal } from "react-icons/lu";
-import { useParams } from "react-router-dom";
+import { LuRotateCw, LuSendHorizontal } from "react-icons/lu";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/chatPage.css";
 import MessageInput from "../components/MessageInput";
 import { useEffect, useRef, useState } from "react";
@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
-import { formatMessageTime } from "../lib/chat";
+import { formatMessageTime, sendUserMessage } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
@@ -22,16 +22,21 @@ import { BiCopy } from "react-icons/bi";
 function ChatPage() {
   const { chatId } = useParams();
   const { user } = useAuth();
+  const bottomRef = useRef(null);
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
   const [copyId, setCopyId] = useState(null);
-  const bottomRef = useRef(null);
 
   useEffect(() => {
     if (!user || chatId === "new") {
       setMessages([]);
+      setLoading(false);
       return;
     }
 
@@ -46,7 +51,7 @@ function ChatPage() {
       "messages",
     );
 
-    const q = query(messagesRef, orderBy("createdAt", "asc", limitToLast(50)));
+    const q = query(messagesRef, orderBy("createdAt", "asc"), limitToLast(50));
 
     const unsubscribe = onSnapshot(
       q,
@@ -90,6 +95,23 @@ function ChatPage() {
       }, 2000);
     } catch (err) {
       console.log("Copy failed:", err);
+    }
+  };
+
+  const retry = async () => {
+    setError(false);
+
+    try {
+      await sendUserMessage({
+        uid: user.uid,
+        chatId,
+        message: lastUserMessage,
+        navigate,
+        setAnswering,
+        retry: true,
+      });
+    } catch {
+      setError(true);
     }
   };
 
@@ -140,7 +162,7 @@ function ChatPage() {
               </div>
             ))}
             {answering && (
-              <div className={`msg-row bot`}>
+              <div className={`msg-row assistant`}>
                 <div className="msg-avatar mono">NL</div>
                 <div className="msg-body">
                   <div className="msg-meta mono">
@@ -154,13 +176,31 @@ function ChatPage() {
                 </div>
               </div>
             )}
+            {error && (
+              <div className={`msg-row assistant error`}>
+                <div className="msg-avatar mono">NL</div>
+                <div className="msg-body">
+                  <div className="msg-meta mono">
+                    <span className="who">Nightline</span>
+                    <span>Now</span>
+                  </div>
+                  <div className="bubble error">
+                    An error occurred.
+                    <button className="retry-btn mono" onClick={retry}>
+                      <LuRotateCw />
+                      Retry
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             <button className="scroll-to-bottom" onClick={scrollToBottom}>
               <BsArrowDown size={14} />
             </button>
             <div ref={bottomRef}></div>
           </>
         )}
-        {messages.length > 0 && (
+        {messages.length > 1 && (
           <div className="ai-hint mono">
             Nightline can make mistakes. check important info.
           </div>
@@ -170,7 +210,9 @@ function ChatPage() {
         setSending={setSending}
         setAnswering={setAnswering}
         sending={sending}
+        setError={setError}
         answering={answering}
+        setLastUserMessage={setLastUserMessage}
       />
     </>
   );

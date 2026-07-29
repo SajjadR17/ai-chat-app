@@ -43,8 +43,8 @@ aside {
 .conversations-list {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   overflow-y: auto;
+  padding-bottom: 100px;
   gap: 10px;
   scrollbar-width: none;
 }
@@ -103,18 +103,7 @@ aside {
   background-color: var(--accent-dim);
 }
 
-.conversation-action-btns {
-  opacity: 0;
-  transition: opacity 0.2s;
-  flex-shrink: 0;
-}
-
-.conversation-card:hover .conversation-action-btns,
-.conversation-card.active .conversation-action-btns {
-  opacity: 1;
-}
-
-.conversation-action-btn {
+.conversation-menu-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,13 +111,46 @@ aside {
   height: 24px;
   border: none;
   background: transparent;
-  color: var(--accent);
+  color: var(--text-primary);
   border-radius: 4px;
   cursor: pointer;
 }
 
-.conversation-action-btn:hover {
+.conversation-menu-btn:hover {
   background: var(--bg-card);
+}
+
+.conversation-menu {
+  position: absolute;
+  right: 0px;
+  top: 30px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.conversation-menu div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.conversation-menu-delete-btn{
+  color: var(--danger);
+}
+
+.conversation-menu-delete-btn:hover{
+  background-color: #5e363c6f;
+}
+
+.conversation-menu-edit-btn:hover{
+  background-color: var(--bg-hover);
 }
 
 .empty-conversations {

@@ -49,6 +49,16 @@ html {
   font-size: var(--fs-mono);
 }
 
+::selection {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+}
+
 body {
   min-height: 100vh;
   font-family:

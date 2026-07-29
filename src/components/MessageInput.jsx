@@ -1,85 +1,62 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuSendHorizontal } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
-import {
-  addMessage,
-  createConversation,
-  getConversationHistory,
-  updateConversation,
-  updateConversationTitle,
-} from "../lib/chat";
+import { sendUserMessage } from "../lib/chat";
 import { ClipLoader } from "react-spinners";
-import { askAI } from "../services/ai";
 
-function MessageInput({ sending, answering, setAnswering, setSending }) {
+function MessageInput({
+  sending,
+  answering,
+  setError,
+  setAnswering,
+  setSending,
+  setLastUserMessage,
+}) {
   const { chatId } = useParams();
   const { user } = useAuth();
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const inputRef = useRef(null);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
+
+    const text = message.trim();
+    if (!text) return;
+
     setSending(true);
+    setError(false);
+    setLastUserMessage(message.trim());
+
     try {
-      let currentChatId = chatId;
-
-      if (!currentChatId || currentChatId === "new") {
-        currentChatId = await createConversation(user.uid);
-      }
-
-      await addMessage(user.uid, currentChatId, "user", message.trim());
-
-      setMessage("");
-      if (chatId === "new") {
-        navigate(`/chat/${currentChatId}`, {
-          replace: true,
-        });
-      }
-
-      setAnswering(true);
-
-      const history = await getConversationHistory(user.uid, currentChatId);
-      const response = await askAI(message.trim(), history, chatId === "new");
-
-      let data;
-
-      try {
-        data = JSON.parse(response);
-      } catch {
-        data = {
-          title: "New Conversation",
-          answer: response,
-        };
-      }
-
-      if (chatId === "new") {
-        await updateConversationTitle(user.uid, currentChatId, data.title);
-      }
-      await addMessage(user.uid, currentChatId, "assistant", data.answer);
-      setAnswering(false);
-      await updateConversation(user.uid, currentChatId);
+      await sendUserMessage({
+        uid: user.uid,
+        chatId,
+        message: text,
+        navigate,
+        setAnswering,
+        setMessage,
+        retry: false,
+      });
     } catch (err) {
-      console.log(err);
-      if (chatId !== "new") {
-        await addMessage(
-          user.uid,
-          chatId,
-          "assistant",
-          "Sorry, I couldn't generate a response.",
-        );
-      }
+      console.error(err);
+      setError(true);
     } finally {
       setSending(false);
     }
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [chatId]);
 
   return (
     <div className="message-input-container">
       <form className="message-input" onSubmit={submitHandler}>
         <textarea
           id="msg-input"
+          ref={inputRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -92,7 +69,7 @@ function MessageInput({ sending, answering, setAnswering, setSending }) {
             }
           }}
           rows={1}
-          placeholder="Message Nightline…"
+          placeholder="Ask Nightline…"
         />
         <button
           type="submit"
