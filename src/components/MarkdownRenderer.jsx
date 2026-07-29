@@ -19,7 +19,7 @@ function MarkdownRenderer({ content }) {
               <SyntaxHighlighter
                 style={oneDark}
                 language={match[1]}
-                PreTag="div"
+                PreTag="pre"
                 {...props}
               >
                 {codeString}

@@ -28,7 +28,7 @@ function App() {
         <div className="layout">
           <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
           <div className="app">
-            <SideBar menuOpen={menuOpen} />
+            <SideBar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
             <main>
               <Routes>
                 <Route path="/" element={<Navigate to="/chat/new" replace />} />

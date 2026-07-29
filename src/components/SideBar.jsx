@@ -9,7 +9,7 @@ import { FiMessageSquare } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { deleteConversation } from "../lib/chat";
 
-function SideBar({ menuOpen }) {
+function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
   const { user } = useAuth();
   const location = useLocation();
@@ -59,23 +59,21 @@ function SideBar({ menuOpen }) {
       <div className="conversations">
         <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
-          {chatId === "new" && (
-            <div className="conversation-card new-chat active">
-              <div className="conversation-dot"></div>
-              <span className="conversation-name">New chat</span>
-            </div>
-          )}
           {conversations.map((chat) => (
             <div
               key={chat.id}
               className={`conversation-card ${chatId === chat.id ? "active" : ""}`}
-              onClick={() => navigate(`/chat/${chat.id}`)}
+              onClick={() => {
+                navigate(`/chat/${chat.id}`);
+                setMenuOpen(false);
+              }}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   navigate(`/chat/${chat.id}`);
                 }
+                setMenuOpen(false);
               }}
             >
               <div className="conversation-info">

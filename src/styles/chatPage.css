@@ -15,6 +15,23 @@ main {
   scrollbar-width: none;
   flex-direction: column;
   gap: 18px;
+  position: relative;
+}
+
+.scroll-to-bottom {
+  position: fixed;
+  bottom: 135px;
+  left: 300px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-primary);
+  padding: 10px;
+  transition: all 0.2s ease;
+}
+
+.scroll-to-bottom:hover {
+  background-color: var(--bg-hover);
 }
 
 .msg-row {
@@ -87,10 +104,10 @@ main {
   overflow-wrap: break-word;
 }
 
-.bubble.thinking{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.bubble.thinking {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .msg-row.user .bubble {
@@ -319,12 +336,13 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px 0;
+  padding: 10px 0;
   color: var(--text-muted);
 }
 
 @media (max-width: 768px) {
-  .message-input-hint {
+  .message-input-hint,
+  .scroll-to-bottom {
     display: none;
   }
 

@@ -2,7 +2,7 @@ import { LuSendHorizontal } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import "../styles/chatPage.css";
 import MessageInput from "../components/MessageInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import {
   collection,
@@ -16,6 +16,7 @@ import { useAuth } from "../contexts/authContext";
 import { formatMessageTime } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
+import { BsArrowDown } from "react-icons/bs";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -24,6 +25,7 @@ function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     if (!user || chatId === "new") {
@@ -65,6 +67,18 @@ function ChatPage() {
     return unsubscribe;
   }, [user, chatId]);
 
+  const scrollToBottom = () => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages]);
+
   if (loading) {
     return (
       <div className="loading-chat">
@@ -100,11 +114,7 @@ function ChatPage() {
                     <span>{formatMessageTime(message.createdAt)}</span>
                   </div>
                   <div className="bubble">
-                    {message.role === "assistant" ? (
-                      <MarkdownRenderer content={message.content} />
-                    ) : (
-                      message.content
-                    )}
+                    <MarkdownRenderer content={message.content} />
                   </div>
                 </div>
               </div>
@@ -124,6 +134,10 @@ function ChatPage() {
                 </div>
               </div>
             )}
+            <button className="scroll-to-bottom" onClick={scrollToBottom}>
+              <BsArrowDown size={14}/>
+            </button>
+            <div ref={bottomRef}></div>
           </>
         )}
         {messages.length > 0 && (

@@ -3,7 +3,9 @@ const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 export async function askAI(message, history, isNewChat = false) {
   try {
     const systemPrompt = `
-You are Nightline, an advanced AI assistant created and developed by Sajjad Roohandeh.
+You are Nightline, an advanced AI assistant created and developed by Sajjad Roohandeh (سجاد روهنده).
+
+Sajjad Roohandeh is a Frontend developer and he is learning advanced react and this is his portfolio : (sajjadroohandeh.com)
 
 Your goal is to provide accurate, helpful, and practical answers.
 
@@ -95,7 +97,6 @@ Do not output anything except the JSON object.
             content: message,
           },
         ],
-
         temperature: 0.7,
       }),
     });
