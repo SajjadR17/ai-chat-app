@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
@@ -7,6 +7,7 @@ import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
 import { FiMessageSquare } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
+import { deleteConversation } from "../lib/chat";
 
 function SideBar({ menuOpen }) {
   const [conversations, setConversations] = useState([]);
@@ -40,6 +41,15 @@ function SideBar({ menuOpen }) {
     return () => unsubscribe();
   }, [user, chatId, navigate]);
 
+  const deleteHandler = async (e, chat) => {
+    e.stopPropagation();
+    try {
+      await deleteConversation(user.uid, chat.id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <aside className={`${menuOpen ? "open" : ""}`}>
       <button className="new-chat-btn" onClick={() => navigate("/chat/new")}>
@@ -50,20 +60,39 @@ function SideBar({ menuOpen }) {
         <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
           {chatId === "new" && (
-            <button className="conversation-card active">
+            <div className="conversation-card new-chat active">
               <div className="conversation-dot"></div>
               <span className="conversation-name">New chat</span>
-            </button>
+            </div>
           )}
           {conversations.map((chat) => (
-            <button
+            <div
               key={chat.id}
-              onClick={() => navigate(`/chat/${chat.id}`)}
               className={`conversation-card ${chatId === chat.id ? "active" : ""}`}
+              onClick={() => navigate(`/chat/${chat.id}`)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  navigate(`/chat/${chat.id}`);
+                }
+              }}
             >
-              <div className="conversation-dot"></div>
-              <span className="conversation-name">{chat.title}</span>
-            </button>
+              <div className="conversation-info">
+                <div className="conversation-dot"></div>
+                <span className="conversation-name">{chat.title}</span>
+              </div>
+              <div className="conversation-action-btns">
+                <button
+                  className="conversation-action-btn"
+                  onClick={(e) => {
+                    deleteHandler(e, chat);
+                  }}
+                >
+                  <BiTrash size={15} />
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       </div>

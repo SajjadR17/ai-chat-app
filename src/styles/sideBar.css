@@ -52,6 +52,7 @@ aside {
 .conversation-card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 9px;
   padding: 9px 10px;
   border-radius: 5px;
@@ -62,6 +63,26 @@ aside {
   background: none;
   cursor: pointer;
   width: 100%;
+}
+
+.conversation-card.new-chat {
+  justify-content: start;
+  padding: 12px 10px;
+}
+
+.conversation-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.conversation-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .conversation-card:hover {
@@ -82,11 +103,32 @@ aside {
   background-color: var(--accent-dim);
 }
 
-.conversation-name {
-  white-space: nowrap;
-  overflow: hidden;
-  overflow-x: auto;
-  scrollbar-width: none;
+.conversation-action-btns {
+  opacity: 0;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.conversation-card:hover .conversation-action-btns,
+.conversation-card.active .conversation-action-btns {
+  opacity: 1;
+}
+
+.conversation-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.conversation-action-btn:hover {
+  background: var(--bg-card);
 }
 
 .empty-conversations {

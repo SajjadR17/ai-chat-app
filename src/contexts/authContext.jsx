@@ -87,7 +87,7 @@ export function AuthProvider({ children }) {
       <div className="app-loading">
         <ClipLoader color="var(--text-secondary)" size={30} />
         <span className="mono" style={{ color: "var(--text-secondary)" }}>
-          LOADING APP
+          LOADING NIGHTLINE
         </span>
       </div>
     );

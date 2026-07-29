@@ -12,7 +12,7 @@ import {
 import { ClipLoader } from "react-spinners";
 import { askAI } from "../services/ai";
 
-function MessageInput({ sending,answering, setAnswering, setSending }) {
+function MessageInput({ sending, answering, setAnswering, setSending }) {
   const { chatId } = useParams();
   const { user } = useAuth();
   const [message, setMessage] = useState("");
@@ -30,7 +30,6 @@ function MessageInput({ sending,answering, setAnswering, setSending }) {
       }
 
       await addMessage(user.uid, currentChatId, "user", message.trim());
-      await updateConversation(user.uid, currentChatId);
 
       setMessage("");
       if (chatId === "new") {
@@ -42,7 +41,7 @@ function MessageInput({ sending,answering, setAnswering, setSending }) {
       setAnswering(true);
 
       const history = await getConversationHistory(user.uid, currentChatId);
-      const response = await askAI(message.trim(), history);
+      const response = await askAI(message.trim(), history, chatId === "new");
 
       let data;
 
@@ -63,12 +62,14 @@ function MessageInput({ sending,answering, setAnswering, setSending }) {
       await updateConversation(user.uid, currentChatId);
     } catch (err) {
       console.log(err);
-      await addMessage(
-        user.uid,
-        chatId,
-        "assistant",
-        "Sorry, I couldn't generate a response.",
-      );
+      if (chatId !== "new") {
+        await addMessage(
+          user.uid,
+          chatId,
+          "assistant",
+          "Sorry, I couldn't generate a response.",
+        );
+      }
     } finally {
       setSending(false);
     }
@@ -81,10 +82,18 @@ function MessageInput({ sending,answering, setAnswering, setSending }) {
           id="msg-input"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+
+              if (message.trim() && !sending && !answering) {
+                submitHandler(e);
+              }
+            }
+          }}
           rows={1}
           placeholder="Message Nightline…"
         />
-
         <button
           type="submit"
           disabled={message.trim().length === 0 || sending || answering}
