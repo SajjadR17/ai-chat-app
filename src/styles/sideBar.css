@@ -161,7 +161,7 @@ aside {
   gap: 20px;
   font-weight: 600;
   color: var(--text-muted);
-  min-height: 600px;
+  min-height: 400px;
 }
 
 .modal-overlay {
@@ -243,6 +243,11 @@ aside {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
+.edit-chat-title-input:focus {
+  background: var(--bg-hover);
+  outline: none;
+}
+
 .edit-input-err {
   color: var(--danger);
   margin: -10px 0;
@@ -259,11 +264,6 @@ aside {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.edit-chat-title-input:focus {
-  background: var(--bg-hover);
-  outline: none;
 }
 
 @keyframes modalIn {

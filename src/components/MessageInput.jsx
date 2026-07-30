@@ -11,6 +11,7 @@ function MessageInput({
   setError,
   setAnswering,
   setSending,
+  setCreatingImg,
   setLastUserMessage,
 }) {
   const { chatId } = useParams();
@@ -37,6 +38,7 @@ function MessageInput({
         navigate,
         setAnswering,
         setMessage,
+        setCreatingImg,
         retry: false,
       });
     } catch (err) {

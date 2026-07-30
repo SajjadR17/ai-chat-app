@@ -31,6 +31,8 @@ function ChatPage() {
   const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const [creatingImg, setCreatingImg] = useState(false);
   const [copyId, setCopyId] = useState(null);
 
   useEffect(() => {
@@ -99,6 +101,8 @@ function ChatPage() {
   };
 
   const retry = async () => {
+    if (retrying) return;
+    setRetrying(true);
     setError(false);
 
     try {
@@ -112,6 +116,9 @@ function ChatPage() {
       });
     } catch {
       setError(true);
+    } finally {
+      setRetrying(false);
+      setError(false);
     }
   };
 
@@ -170,8 +177,23 @@ function ChatPage() {
                     <span>Now</span>
                   </div>
                   <div className="bubble thinking">
-                    <ThinkingOrb state="searching" size={20} speed={1.15} />
+                    <ThinkingOrb state="searching" size={20} speed={1.3} />
                     Thinking...
+                  </div>
+                </div>
+              </div>
+            )}
+            {creatingImg && (
+              <div className={`msg-row assistant`}>
+                <div className="msg-avatar mono">NL</div>
+                <div className="msg-body">
+                  <div className="msg-meta mono">
+                    <span className="who">Nightline</span>
+                    <span>Now</span>
+                  </div>
+                  <div className="bubble thinking">
+                    <ThinkingOrb state="shaping" size={20} speed={1.3} />
+                    Creating image ...
                   </div>
                 </div>
               </div>
@@ -186,7 +208,11 @@ function ChatPage() {
                   </div>
                   <div className="bubble error">
                     An error occurred.
-                    <button className="retry-btn mono" onClick={retry}>
+                    <button
+                      className="retry-btn mono"
+                      onClick={retry}
+                      disabled={answering}
+                    >
                       <LuRotateCw />
                       Retry
                     </button>
@@ -212,6 +238,7 @@ function ChatPage() {
         sending={sending}
         setError={setError}
         answering={answering}
+        setCreatingImg={setCreatingImg}
         setLastUserMessage={setLastUserMessage}
       />
     </>

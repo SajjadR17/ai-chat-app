@@ -13,6 +13,7 @@ import {
 
 import { db } from "../../firebase";
 import { askAI } from "../services/ai";
+import { generateImage } from "../services/imgAi";
 
 const createConversation = async (uid) => {
   const docRef = await addDoc(collection(db, "users", uid, "conversations"), {
@@ -30,12 +31,13 @@ const updateConversation = async (uid, chatId) => {
   });
 };
 
-const addMessage = async (uid, chatId, role, content) => {
+const addMessage = async (uid, chatId, role, content, type = "text") => {
   await addDoc(
     collection(db, "users", uid, "conversations", chatId, "messages"),
     {
       role,
       content,
+      type,
       createdAt: serverTimestamp(),
     },
   );
@@ -123,6 +125,7 @@ export const sendUserMessage = async ({
   navigate,
   setAnswering,
   setMessage,
+  setCreatingImg,
   retry,
 }) => {
   let currentChatId = chatId;
@@ -148,27 +151,33 @@ export const sendUserMessage = async ({
   try {
     const history = await getConversationHistory(uid, currentChatId);
 
-    const response = await askAI(message, history, chatId === "new");
-
-    let data;
-
-    try {
-      data = JSON.parse(response);
-    } catch {
-      data = {
-        title: "New Conversation",
-        answer: response,
-      };
-    }
+    const data = await askAI(message, history, chatId === "new");
 
     if (chatId === "new") {
-      await updateConversationTitle(uid, currentChatId, data.title);
+      await updateConversationTitle(uid, currentChatId, data.title || "New Conversation");
     }
 
-    setAnswering?.(false);
-    await addMessage(uid, currentChatId, "assistant", data.answer);
+    if (data.type === "image") {
+      setAnswering(false);
+      setCreatingImg(true);
+      const imageUrl = await generateImage(data.prompt);
+      setCreatingImg(false);
+      await addMessage(
+        uid,
+        currentChatId,
+        "assistant",
+        `![generated image](${imageUrl})`,
+      );
+
+      return;
+    } else {
+      setAnswering?.(false);
+      await addMessage(uid, currentChatId, "assistant", data.answer, "text");
+    }
+
     await updateConversation(uid, currentChatId);
   } finally {
     setAnswering?.(false);
+    setCreatingImg(false);
   }
 };
