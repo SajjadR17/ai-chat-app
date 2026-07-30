@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiPencil, BiPlus, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
@@ -7,12 +7,14 @@ import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
 import { FiMessageSquare } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { deleteConversation } from "../lib/chat";
 import { HiDotsHorizontal } from "react-icons/hi";
+import DeleteChatModal from "./DeleteChatModal";
 
 function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
   const [conversationMenuOpenId, setConversationMenuOpenId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
   const { user } = useAuth();
   const location = useLocation();
   const chatId = location.pathname.replace("/chat/", "");
@@ -53,15 +55,6 @@ function SideBar({ menuOpen, setMenuOpen }) {
     return () => unsubscribe();
   }, [user, chatId, navigate]);
 
-  const deleteHandler = async (e, chat) => {
-    e.stopPropagation();
-    try {
-      await deleteConversation(user.uid, chat.id);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const convMenuOpenHandler = (e, chat) => {
     e.stopPropagation();
     if (conversationMenuOpenId === chat.id) {
@@ -80,6 +73,9 @@ function SideBar({ menuOpen, setMenuOpen }) {
       <div className="conversations">
         <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
+          {conversations.length === 0 && (
+            <div className="empty-conversations"></div>
+          )}
           {conversations.map((chat) => (
             <div
               key={chat.id}
@@ -109,11 +105,25 @@ function SideBar({ menuOpen, setMenuOpen }) {
               </button>
               {conversationMenuOpenId === chat.id && (
                 <div className="conversation-menu">
-                  <div className="conversation-menu-edit-btn">
+                  <div
+                    className="conversation-menu-edit-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setConversationMenuOpenId(null);
+                    }}
+                  >
                     <BiPencil size={15} />
                     Edit
                   </div>
-                  <div className="conversation-menu-delete-btn" onClick={(e)=>deleteHandler(e,chat)}>
+                  <div
+                    className="conversation-menu-delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedChat(chat);
+                      setDeleteModalOpen(true);
+                      setConversationMenuOpenId(null);
+                    }}
+                  >
                     <BiTrash size={15} />
                     Delete
                   </div>
@@ -123,6 +133,13 @@ function SideBar({ menuOpen, setMenuOpen }) {
           ))}
         </div>
       </div>
+      {deleteModalOpen && (
+        <DeleteChatModal
+          chat={selectedChat}
+          setDeleteModalOpen={setDeleteModalOpen}
+          setSelectedChat={setSelectedChat}
+        />
+      )}
     </aside>
   );
 }

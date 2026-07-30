@@ -56,7 +56,14 @@ nav {
   width: 6px;
   height: 6px;
   border-radius: 50%;
+}
+
+.status-circle.online {
   background: rgb(95, 208, 138);
+}
+
+.status-circle.offline {
+  background: var(--danger);
 }
 
 .user-profile-card {

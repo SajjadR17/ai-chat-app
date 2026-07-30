@@ -141,15 +141,15 @@ aside {
   padding: 10px;
 }
 
-.conversation-menu-delete-btn{
+.conversation-menu-delete-btn {
   color: var(--danger);
 }
 
-.conversation-menu-delete-btn:hover{
+.conversation-menu-delete-btn:hover {
   background-color: #5e363c6f;
 }
 
-.conversation-menu-edit-btn:hover{
+.conversation-menu-edit-btn:hover {
   background-color: var(--bg-hover);
 }
 
@@ -162,6 +162,82 @@ aside {
   font-weight: 600;
   color: var(--text-muted);
   min-height: 600px;
+}
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 999;
+}
+
+.delete-chat-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(420px, 90%);
+  transform: translate(-50%, -50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  animation: modalIn 0.18s ease;
+}
+
+.delete-modal-content {
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.delete-modal-action-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancel-delete-btn,
+.confirm-delete-btn {
+  min-width: 90px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  transition: 0.15s ease;
+}
+
+.cancel-delete-btn:hover,
+.confirm-delete-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.confirm-delete-btn:active,
+.cancel-delete-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 @media (max-width: 768px) {

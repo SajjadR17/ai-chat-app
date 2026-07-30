@@ -43,7 +43,7 @@ ${
       Also generate a short title for this conversation.
 
       Title rules:
-      - Maximum 5 words
+      - Maximum 4 words
       - Clear and descriptive
       - No quotes
       - No punctuation

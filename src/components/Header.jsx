@@ -30,8 +30,12 @@ function Header({ menuOpen, setMenuOpen }) {
         </div>
         <div className="nav-right">
           <div className="user-status mono">
-            <div className="status-circle"></div>
-            <span className="badge-content">online</span>
+            <div
+              className={`status-circle ${!user || !userProfile ? "offline" : "online"}`}
+            ></div>
+            <span className="badge-content">
+              {!user || !userProfile ? "offline" : "online"}
+            </span>
           </div>
           {user && userProfile && (
             <div className="user-profile-card mono">
