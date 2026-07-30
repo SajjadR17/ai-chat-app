@@ -68,7 +68,13 @@ function SideBar({ menuOpen, setMenuOpen }) {
 
   return (
     <aside className={`${menuOpen ? "open" : ""}`}>
-      <button className="new-chat-btn" onClick={() => navigate("/chat/new")}>
+      <button
+        className="new-chat-btn"
+        onClick={() => {
+          navigate("/chat/new");
+          setMenuOpen(false);
+        }}
+      >
         <BiPlus />
         New chat
       </button>
@@ -76,7 +82,10 @@ function SideBar({ menuOpen, setMenuOpen }) {
         <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
           {conversations.length === 0 && (
-            <div className="empty-conversations"></div>
+            <div className="empty-conversations">
+              <FiMessageSquare size={40}/>
+              <span className="mono">No conversations</span>
+            </div>
           )}
           {conversations.map((chat) => (
             <div
