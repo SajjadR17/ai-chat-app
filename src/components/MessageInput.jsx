@@ -48,7 +48,7 @@ function MessageInput({
   };
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }, [chatId]);
 
   return (
@@ -56,6 +56,7 @@ function MessageInput({
       <form className="message-input" onSubmit={submitHandler}>
         <textarea
           id="msg-input"
+          maxLength={8000}
           ref={inputRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}

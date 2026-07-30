@@ -164,7 +164,7 @@ aside {
   min-height: 600px;
 }
 
-.delete-modal-overlay {
+.modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
@@ -172,7 +172,7 @@ aside {
   z-index: 999;
 }
 
-.delete-chat-modal {
+.chat-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -190,21 +190,21 @@ aside {
   animation: modalIn 0.18s ease;
 }
 
-.delete-modal-content {
+.modal-content {
   color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
   line-height: 1.5;
 }
 
-.delete-modal-action-btns {
+.modal-action-btns {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.cancel-delete-btn,
-.confirm-delete-btn {
+.cancel-btn,
+.confirm-btn {
   min-width: 90px;
   padding: 10px 18px;
   border-radius: 6px;
@@ -217,15 +217,53 @@ aside {
   transition: 0.15s ease;
 }
 
-.cancel-delete-btn:hover,
-.confirm-delete-btn:hover {
+.cancel-btn:hover,
+.confirm-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
-.confirm-delete-btn:active,
-.cancel-delete-btn:active {
+.confirm-btn:active,
+.cancel-btn:active {
   transform: scale(0.98);
+}
+
+.edit-chat-title-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.edit-chat-title-input:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.edit-input-err {
+  color: var(--danger);
+  margin: -10px 0;
+  animation: errorFade 0.15s ease;
+}
+
+@keyframes errorFade {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edit-chat-title-input:focus {
+  background: var(--bg-hover);
+  outline: none;
 }
 
 @keyframes modalIn {

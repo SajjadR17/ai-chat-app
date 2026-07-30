@@ -29,19 +29,19 @@ function DeleteChatModal({ chat, setDeleteModalOpen, setSelectedChat }) {
 
   return createPortal(
     <>
-      <div className="delete-modal-overlay" onClick={closeModal}></div>
-      <div className="delete-chat-modal">
-        <span className="delete-modal-content">Delete this conversation?</span>
-        <div className="delete-modal-action-btns mono">
+      <div className="modal-overlay" onClick={closeModal}></div>
+      <div className="chat-modal">
+        <span className="modal-content">Delete this conversation?</span>
+        <div className="modal-action-btns mono">
           <button
-            className="cancel-delete-btn"
+            className="cancel-btn"
             disabled={deleting}
             onClick={closeModal}
           >
             No
           </button>
           <button
-            className="confirm-delete-btn"
+            className="confirm-btn"
             disabled={deleting}
             onClick={deleteHandler}
           >
@@ -54,7 +54,7 @@ function DeleteChatModal({ chat, setDeleteModalOpen, setSelectedChat }) {
         </div>
       </div>
     </>,
-    document.body
+    document.body,
   );
 }
 

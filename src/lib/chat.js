@@ -87,7 +87,7 @@ const getConversationHistory = async (uid, chatId) => {
   });
 };
 
-const updateConversationTitle = async (uid, chatId, title) => {
+export const updateConversationTitle = async (uid, chatId, title) => {
   await updateDoc(doc(db, "users", uid, "conversations", chatId), {
     title,
   });
@@ -168,7 +168,6 @@ export const sendUserMessage = async ({
     setAnswering?.(false);
     await addMessage(uid, currentChatId, "assistant", data.answer);
     await updateConversation(uid, currentChatId);
-    
   } finally {
     setAnswering?.(false);
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiPencil, BiPlus, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
@@ -9,11 +9,13 @@ import { FiMessageSquare } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { HiDotsHorizontal } from "react-icons/hi";
 import DeleteChatModal from "./DeleteChatModal";
+import EditChatModal from "./EditChatModal";
 
 function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
   const [conversationMenuOpenId, setConversationMenuOpenId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const { user } = useAuth();
   const location = useLocation();
@@ -109,6 +111,8 @@ function SideBar({ menuOpen, setMenuOpen }) {
                     className="conversation-menu-edit-btn"
                     onClick={(e) => {
                       e.stopPropagation();
+                      setSelectedChat(chat);
+                      setEditModalOpen(true);
                       setConversationMenuOpenId(null);
                     }}
                   >
@@ -137,6 +141,13 @@ function SideBar({ menuOpen, setMenuOpen }) {
         <DeleteChatModal
           chat={selectedChat}
           setDeleteModalOpen={setDeleteModalOpen}
+          setSelectedChat={setSelectedChat}
+        />
+      )}
+      {editModalOpen && (
+        <EditChatModal
+          chat={selectedChat}
+          setEditModalOpen={setEditModalOpen}
           setSelectedChat={setSelectedChat}
         />
       )}
