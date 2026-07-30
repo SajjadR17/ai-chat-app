@@ -152,9 +152,10 @@ export const sendUserMessage = async ({
     const history = await getConversationHistory(uid, currentChatId);
 
     const data = await askAI(message, history, chatId === "new");
+    console.log(data);
 
     if (chatId === "new") {
-      await updateConversationTitle(uid, currentChatId, data.title || "New Conversation");
+      await updateConversationTitle(uid, currentChatId, data.title);
     }
 
     if (data.type === "image") {
