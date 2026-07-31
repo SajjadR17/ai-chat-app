@@ -168,12 +168,13 @@ export const sendUserMessage = async ({
         currentChatId,
         "assistant",
         `![generated image](${imageUrl})`,
+        data.type,
       );
 
       return;
     } else {
       setAnswering?.(false);
-      await addMessage(uid, currentChatId, "assistant", data.answer, "text");
+      await addMessage(uid, currentChatId, "assistant", data.answer, data.type);
     }
 
     await updateConversation(uid, currentChatId);

@@ -17,7 +17,7 @@ import { formatMessageTime, sendUserMessage } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
-import { BiCopy } from "react-icons/bi";
+import { BiCopy, BiDownload } from "react-icons/bi";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -122,6 +122,30 @@ function ChatPage() {
     }
   };
 
+  const downloadImage = async (url) => {
+    try {
+      const match = url.match(/!\[.*?\]\((.*?)\)/);
+
+      const imageUrl = match?.[1];
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      const objectUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = objectUrl;
+      a.download = "nightline-image.png";
+      document.body.appendChild(a);
+
+      a.click();
+
+      a.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-chat">
@@ -155,12 +179,21 @@ function ChatPage() {
                       {message.role === "assistant" ? "Nightline" : "You"}
                     </span>
                     <span>{formatMessageTime(message.createdAt)}</span>
-                    <button
-                      className="copy-msg-btn"
-                      onClick={() => copyMessage(message.id, message.content)}
-                    >
-                      {copyId === message.id ? "copied" : <BiCopy />}
-                    </button>
+                    {message.type === "image" ? (
+                      <button
+                        className="download-img-btn"
+                        onClick={() => downloadImage(message.content)}
+                      >
+                        <BiDownload />
+                      </button>
+                    ) : (
+                      <button
+                        className="copy-msg-btn"
+                        onClick={() => copyMessage(message.id, message.content)}
+                      >
+                        {copyId === message.id ? "copied" : <BiCopy />}
+                      </button>
+                    )}
                   </div>
                   <div className="bubble">
                     <MarkdownRenderer content={message.content} />

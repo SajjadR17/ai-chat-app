@@ -83,7 +83,8 @@ main {
   color: var(--text-muted);
 }
 
-.copy-msg-btn{
+.copy-msg-btn,
+.download-img-btn {
   background-color: transparent;
   border: none;
   color: var(--text-muted);
@@ -112,16 +113,16 @@ main {
   overflow-wrap: break-word;
 }
 
-.bubble.error{
+.bubble.error {
   border-left: 2px solid var(--danger);
-  border-radius:  0 8px 8px 8px;
+  border-radius: 0 8px 8px 8px;
   background: var(--bg-card);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.retry-btn{
+.retry-btn {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -133,11 +134,11 @@ main {
   background-color: transparent;
 }
 
-.retry-btn:hover{
+.retry-btn:hover {
   background-color: var(--bg-hover);
 }
 
-.msg-row.assistant.error .msg-avatar{
+.msg-row.assistant.error .msg-avatar {
   background: rgba(255, 255, 255, 0.06);
   color: var(--danger);
   border: 1px solid var(--border);
