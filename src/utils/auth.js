@@ -7,7 +7,7 @@ import {
 import { auth, db } from "../../firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
-function buildShortName(fullName) {
+const buildShortName = (fullName) => {
   const words = fullName.trim().split(/\s+/);
 
   if (words.length === 1) {
@@ -18,17 +18,17 @@ function buildShortName(fullName) {
   const last = words[words.length - 1][0];
 
   return (first + last).toUpperCase();
-}
+};
 
-export async function login(email, password) {
+export const login = async (email, password) => {
   return await signInWithEmailAndPassword(auth, email, password);
-}
+};
 
-export function logout() {
+export const logout = () => {
   return signOut(auth);
-}
+};
 
-export async function signup(email, password, username) {
+export const signup = async (email, password, username) => {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -47,4 +47,4 @@ export async function signup(email, password, username) {
   });
 
   return user;
-}
+};

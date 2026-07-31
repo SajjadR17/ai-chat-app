@@ -78,6 +78,40 @@ nav {
   border: 1px solid var(--border);
 }
 
+.profile-card-menu {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  min-width: 200px;
+  z-index: 50;
+  padding: 5px;
+}
+
+.profile-card-menu-username,
+.profile-card-menu-logout-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border-radius: 5px;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+.profile-card-menu-username:hover,
+.profile-card-menu-logout-btn:hover{
+  background-color: var(--bg-hover);
+}
+
+.profile-card-menu-logout-btn {
+  border: none;
+  background-color: transparent;
+}
+
 @media (max-width: 760px) {
   .menu-icon,
   .close-menu-icon {
