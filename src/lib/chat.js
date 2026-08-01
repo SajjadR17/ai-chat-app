@@ -43,7 +43,7 @@ const addMessage = async (uid, chatId, role, content, type = "text") => {
   );
 };
 
-export function formatMessageTime(timestamp) {
+export const formatMessageTime = (timestamp) => {
   if (!timestamp) return "";
 
   const date = timestamp.toDate();
@@ -63,7 +63,7 @@ export function formatMessageTime(timestamp) {
     month: "short",
     day: "numeric",
   });
-}
+};
 
 const getConversationHistory = async (uid, chatId) => {
   const messagesRef = collection(
@@ -91,7 +91,7 @@ const getConversationHistory = async (uid, chatId) => {
 
 export const updateConversationTitle = async (uid, chatId, title) => {
   await updateDoc(doc(db, "users", uid, "conversations", chatId), {
-    title,
+    title: title || "New Conversation",
   });
 };
 
@@ -121,6 +121,8 @@ export const deleteConversation = async (uid, chatId) => {
 export const sendUserMessage = async ({
   uid,
   chatId,
+  selectedTool,
+  setSelectedTool,
   message,
   navigate,
   setAnswering,
@@ -146,13 +148,10 @@ export const sendUserMessage = async ({
     });
   }
 
-  setAnswering?.(true);
-
   try {
+    setAnswering?.(true);
     const history = await getConversationHistory(uid, currentChatId);
-
-    const data = await askAI(message, history, chatId === "new");
-    console.log(data);
+    const data = await askAI(message, history, chatId === "new", selectedTool);
 
     if (chatId === "new") {
       await updateConversationTitle(uid, currentChatId, data.title);
@@ -168,7 +167,7 @@ export const sendUserMessage = async ({
         currentChatId,
         "assistant",
         `![generated image](${imageUrl})`,
-        data.type,
+        "image",
       );
 
       return;
@@ -181,5 +180,6 @@ export const sendUserMessage = async ({
   } finally {
     setAnswering?.(false);
     setCreatingImg(false);
+    setSelectedTool("auto");
   }
 };

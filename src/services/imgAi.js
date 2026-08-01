@@ -1,6 +1,6 @@
 const IMAGE_URL = "https://image-worker.nightline-ai.workers.dev";
 
-export async function generateImage(prompt) {
+export const generateImage = async (prompt) => {
   try {
     const response = await fetch(IMAGE_URL, {
       method: "POST",
@@ -25,4 +25,4 @@ export async function generateImage(prompt) {
     console.error("generateImage error:", error);
     throw error;
   }
-}
+};

@@ -21,12 +21,13 @@ import { BiCopy, BiDownload } from "react-icons/bi";
 
 function ChatPage() {
   const { chatId } = useParams();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const bottomRef = useRef(null);
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedTool, setSelectedTool] = useState("auto");
   const [error, setError] = useState(false);
   const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -163,7 +164,7 @@ function ChatPage() {
         {chatId === "new" ? (
           <div className="empty-state">
             <div className="empty-state-dot"></div>
-            <h2>Start the conversation</h2>
+            <h2>Hi {userProfile.username}</h2>
             <span>Send a message below so Nightline will reply</span>
           </div>
         ) : (
@@ -210,7 +211,7 @@ function ChatPage() {
                     <span>Now</span>
                   </div>
                   <div className="bubble thinking">
-                    <ThinkingOrb state="searching" size={20} speed={1.3} />
+                    <ThinkingOrb state="working" size={20} speed={1.3} />
                     Thinking...
                   </div>
                 </div>
@@ -273,6 +274,8 @@ function ChatPage() {
         answering={answering}
         setCreatingImg={setCreatingImg}
         setLastUserMessage={setLastUserMessage}
+        selectedTool={selectedTool}
+        setSelectedTool={setSelectedTool}
       />
     </>
   );

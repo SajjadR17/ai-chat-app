@@ -115,7 +115,7 @@ function SideBar({ menuOpen, setMenuOpen }) {
                 <HiDotsHorizontal size={15} />
               </button>
               {conversationMenuOpenId === chat.id && (
-                <div className="conversation-menu">
+                <div className="conversation-menu mono">
                   <div
                     className="conversation-menu-edit-btn"
                     onClick={(e) => {
