@@ -31,7 +31,14 @@ const updateConversation = async (uid, chatId) => {
   });
 };
 
-const addMessage = async (uid, chatId, role, content, type = "text") => {
+const addMessage = async (
+  uid,
+  chatId,
+  role,
+  content,
+  type = "text",
+  lang = "en-US",
+) => {
   await addDoc(
     collection(db, "users", uid, "conversations", chatId, "messages"),
     {
@@ -39,6 +46,7 @@ const addMessage = async (uid, chatId, role, content, type = "text") => {
       content,
       type,
       createdAt: serverTimestamp(),
+      lang,
     },
   );
 };
@@ -137,7 +145,7 @@ export const sendUserMessage = async ({
   }
 
   if (!retry) {
-    await addMessage(uid, currentChatId, "user", message);
+    await addMessage(uid, currentChatId, "user", message, "text");
   }
 
   setMessage?.("");
@@ -173,7 +181,14 @@ export const sendUserMessage = async ({
       return;
     } else {
       setAnswering?.(false);
-      await addMessage(uid, currentChatId, "assistant", data.answer, data.type);
+      await addMessage(
+        uid,
+        currentChatId,
+        "assistant",
+        data.answer,
+        data.type,
+        data.lang,
+      );
     }
 
     await updateConversation(uid, currentChatId);

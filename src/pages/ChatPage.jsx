@@ -17,7 +17,8 @@ import { formatMessageTime, sendUserMessage } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
-import { BiCopy, BiDownload } from "react-icons/bi";
+import { BiCopy, BiDownload, BiStopCircle, BiVolumeFull } from "react-icons/bi";
+import { isSpeaking, speak, stopSpeaking } from "../services/speech";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -28,6 +29,7 @@ function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedTool, setSelectedTool] = useState("auto");
+  const [speakingId, setSpeakingId] = useState(null);
   const [error, setError] = useState(false);
   const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -37,6 +39,12 @@ function ChatPage() {
   const [copyId, setCopyId] = useState(null);
 
   useEffect(() => {
+    const cancelTextToSpeech = () => {
+      speechSynthesis.cancel();
+      setSpeakingId("");
+    };
+    cancelTextToSpeech();
+
     if (!user || chatId === "new") {
       setMessages([]);
       setLoading(false);
@@ -195,6 +203,25 @@ function ChatPage() {
                         {copyId === message.id ? "copied" : <BiCopy />}
                       </button>
                     )}
+                    {"speechSynthesis" in window && message.type === "text" ? (
+                      isSpeaking() && speakingId === message.id ? (
+                        <BiStopCircle
+                          className="cancel-read-msg-btn"
+                          onClick={() => {
+                            stopSpeaking();
+                            setSpeakingId(null);
+                          }}
+                        />
+                      ) : (
+                        <BiVolumeFull
+                          className="read-msg-btn"
+                          onClick={() => {
+                            speak(message.content, message.lang);
+                            setSpeakingId(message.id);
+                          }}
+                        />
+                      )
+                    ) : null}
                   </div>
                   <div className="bubble">
                     <MarkdownRenderer content={message.content} />

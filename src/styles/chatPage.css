@@ -84,10 +84,13 @@ main {
 }
 
 .copy-msg-btn,
-.download-img-btn {
+.download-img-btn,
+.cancel-read-msg-btn,
+.read-msg-btn {
   background-color: transparent;
   border: none;
   color: var(--text-muted);
+  cursor: pointer;
   align-self: center;
 }
 
@@ -364,13 +367,13 @@ main {
   justify-content: space-between;
 }
 
-.message-input-action-btns-left{
+.message-input-action-btns-left {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.active-tool{
+.active-tool {
   display: flex;
   align-items: center;
   gap: 10px;
