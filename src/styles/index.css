@@ -72,7 +72,8 @@ body {
     sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -117,6 +118,7 @@ ol {
 
 .layout {
   height: 100dvh;
+  overflow: hidden;
   display: grid;
   grid-template-rows: 58px 1fr;
 }

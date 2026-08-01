@@ -92,7 +92,7 @@ function ChatPage() {
   };
 
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [messages]);
 
   const copyMessage = async (id, text) => {
@@ -170,7 +170,7 @@ function ChatPage() {
         {chatId === "new" ? (
           <div className="empty-state">
             <div className="empty-state-dot"></div>
-            <h2>Hi {userProfile?.username}</h2>
+            <h2>Hi {userProfile?.username || "Start the conversation"}</h2>
             <span>Send a message below so Nightline will reply</span>
           </div>
         ) : (
