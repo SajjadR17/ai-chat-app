@@ -1,7 +1,6 @@
 aside {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   background-color: var(--bg-secondary);
   grid-area: sidebar;
   border-right: 1px solid var(--border);
@@ -9,7 +8,16 @@ aside {
   min-height: 0;
 }
 
-.new-chat-btn {
+.sidebar-action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.new-chat-btn,
+.search-btn {
   display: flex;
   align-items: center;
   background: var(--bg-card);
@@ -23,12 +31,14 @@ aside {
   transition: border-color 0.15s ease;
 }
 
-.new-chat-btn:hover {
+.new-chat-btn:hover,
+.search-btn:hover {
   border-color: var(--accent-dim);
 }
 
 .conversations {
   display: flex;
+  margin-top: 20px;
   flex-direction: column;
   gap: 10px;
   flex: 1;
@@ -45,7 +55,7 @@ aside {
   flex-direction: column;
   overflow-y: auto;
   padding-bottom: 100px;
-  gap: 10px;
+  gap: 5px;
   scrollbar-width: none;
 }
 
@@ -63,6 +73,17 @@ aside {
   background: none;
   cursor: pointer;
   width: 100%;
+}
+
+.conversation-card:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.conversation-card.active {
+  background: var(--bg-card);
+  border-color: var(--border);
+  color: var(--text-primary);
 }
 
 .conversation-card.new-chat {
@@ -83,17 +104,6 @@ aside {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.conversation-card:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-.conversation-card.active {
-  background: var(--bg-hover);
-  border-color: var(--border);
-  color: var(--text-primary);
 }
 
 .conversation-dot {
@@ -190,6 +200,59 @@ aside {
   animation: modalIn 0.18s ease;
 }
 
+.search-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-modal-close-btn {
+  border-radius: 6px;
+  height: 40px;
+  width: 40px;
+  background: transparent;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  transition: 0.15s ease;
+}
+
+.search-result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  max-height: 200px;
+}
+
+.search-modal-conversation-card {
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.empty-convs-search {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 12px;
+}
+
+.search-modal-conversation-card:hover {
+  background-color: var(--bg-hover);
+}
+
 .modal-content {
   color: var(--text-primary);
   font-size: 16px;
@@ -218,17 +281,20 @@ aside {
 }
 
 .cancel-btn:hover,
-.confirm-btn:hover {
+.confirm-btn:hover,
+.search-modal-close-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
 .confirm-btn:active,
-.cancel-btn:active {
+.cancel-btn:active,
+.search-modal-close-btn:active {
   transform: scale(0.98);
 }
 
-.edit-chat-title-input {
+.edit-chat-title-input,
+.search-input {
   width: 100%;
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -239,12 +305,17 @@ aside {
   transition: all 0.2s ease;
 }
 
-.edit-chat-title-input:hover {
+.edit-chat-title-input:hover,
+.search-input:hover {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
 .edit-chat-title-input:focus {
   background: var(--bg-hover);
+  outline: none;
+}
+
+.search-input:focus {
   outline: none;
 }
 

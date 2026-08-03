@@ -34,7 +34,7 @@ Return:
 
 {
   "type":"image",
-  "title":"",
+  "title":"${isNewChat ? "Generated title" : ""}",
   "prompt":"Detailed English Flux prompt"
 }
 
@@ -63,7 +63,7 @@ Return:
 
 {
   "type":"text",
-  "title":"",
+  "title":"${isNewChat ? "Generated title" : ""}",
   "lang":"response language like : fa-IR , en-US and ....".
   "answer":"Markdown response"
 }
@@ -89,7 +89,7 @@ Return:
 
 {
   "type":"blocked",
-  "title":"",
+  "title":"${isNewChat ? "Generated title" : ""}",
   "answer":"Sorry, I can't help with that request."
 }
 `;

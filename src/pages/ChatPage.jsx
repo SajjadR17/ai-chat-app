@@ -19,6 +19,7 @@ import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
 import { BiCopy, BiDownload, BiStopCircle, BiVolumeFull } from "react-icons/bi";
 import { isSpeaking, speak, stopSpeaking } from "../services/speech";
+import { FiCheck } from "react-icons/fi";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -178,7 +179,7 @@ function ChatPage() {
             {messages.map((message) => (
               <div key={message.id} className={`msg-row ${message.role}`}>
                 <div className="msg-avatar mono">
-                  {message.role === "assistant" ? "NL" : "YOU"}
+                  {message.role === "assistant" ? "NL" : userProfile?.shortName}
                 </div>
                 <div className="msg-body">
                   <div className="msg-meta mono">
@@ -198,7 +199,7 @@ function ChatPage() {
                         className="copy-msg-btn"
                         onClick={() => copyMessage(message.id, message.content)}
                       >
-                        {copyId === message.id ? "copied" : <BiCopy />}
+                        {copyId === message.id ? <FiCheck /> : <BiCopy />}
                       </button>
                     )}
                     {"speechSynthesis" in window && message.type === "text" ? (

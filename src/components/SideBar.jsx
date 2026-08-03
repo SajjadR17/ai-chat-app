@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiPencil, BiPlus, BiTrash } from "react-icons/bi";
+import { BiPencil, BiPlus, BiSearch, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { HiDotsHorizontal } from "react-icons/hi";
 import DeleteChatModal from "./DeleteChatModal";
 import EditChatModal from "./EditChatModal";
+import SearchModal from "./SearchModal";
 
 function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
@@ -17,6 +18,7 @@ function SideBar({ menuOpen, setMenuOpen }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
   const chatId = location.pathname.replace("/chat/", "");
@@ -68,22 +70,32 @@ function SideBar({ menuOpen, setMenuOpen }) {
 
   return (
     <aside className={`${menuOpen ? "open" : ""}`}>
-      <button
-        className="new-chat-btn"
-        onClick={() => {
-          navigate("/chat/new");
-          setMenuOpen(false);
-        }}
-      >
-        <BiPlus />
-        New chat
-      </button>
+      <div className="sidebar-action-btns">
+        <button
+          className="new-chat-btn"
+          onClick={() => {
+            navigate("/chat/new");
+            setMenuOpen(false);
+          }}
+        >
+          <BiPlus />
+          New chat
+        </button>
+        <button
+          className="search-btn"
+          onClick={() => {
+            setSearchModalOpen(true);
+          }}
+        >
+          <BiSearch />
+          Search
+        </button>
+      </div>
       <div className="conversations">
-        <span className="conversations-title mono">CONVERSATIONS</span>
         <div className="conversations-list">
           {conversations.length === 0 && (
             <div className="empty-conversations">
-              <FiMessageSquare size={40}/>
+              <FiMessageSquare size={40} />
               <span className="mono">No conversations</span>
             </div>
           )}
@@ -159,6 +171,9 @@ function SideBar({ menuOpen, setMenuOpen }) {
           setEditModalOpen={setEditModalOpen}
           setSelectedChat={setSelectedChat}
         />
+      )}
+      {searchModalOpen && (
+        <SearchModal setSearchModalOpen={setSearchModalOpen} />
       )}
     </aside>
   );
