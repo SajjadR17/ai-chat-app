@@ -20,6 +20,7 @@ import { BsArrowDown } from "react-icons/bs";
 import { BiCopy, BiDownload, BiStopCircle, BiVolumeFull } from "react-icons/bi";
 import { isSpeaking, speak, stopSpeaking } from "../services/speech";
 import { FiCheck } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -106,7 +107,8 @@ function ChatPage() {
         setCopyId(null);
       }, 2000);
     } catch (err) {
-      console.log("Copy failed:", err);
+      console.log(err);
+      toast.error("Copy failed.");
     }
   };
 
@@ -151,8 +153,9 @@ function ChatPage() {
 
       a.remove();
       URL.revokeObjectURL(objectUrl);
-    } catch (error) {
-      console.error("Download failed:", error);
+    } catch (err) {
+      console.log(err);
+      toast.error("Download failed.");
     }
   };
 
@@ -173,7 +176,11 @@ function ChatPage() {
         {chatId === "new" ? (
           <div className="empty-state">
             <div className="empty-state-dot"></div>
-            <h2>Hi {userProfile?.username || "Start the conversation"}</h2>
+            <h2>
+              {userProfile?.username
+                ? `Hi ${userProfile?.username}`
+                : "Start the conversation"}
+            </h2>
             <span>Send a message below so Nightline will reply</span>
           </div>
         ) : (

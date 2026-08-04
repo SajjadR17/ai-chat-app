@@ -9,6 +9,7 @@ import { ImImage } from "react-icons/im";
 import { CgClose } from "react-icons/cg";
 import { startListening, stopListening } from "../services/speechToText";
 import { BsPauseBtn } from "react-icons/bs";
+import toast from "react-hot-toast";
 
 function MessageInput({
   sending,
@@ -50,8 +51,37 @@ function MessageInput({
         setListening(false);
       },
 
-      onError: () => {
+      onError: (event) => {
         setListening(false);
+
+        switch (event.error) {
+          case "not-allowed":
+            toast.error("Microphone permission denied.");
+            break;
+
+          case "service-not-allowed":
+            toast.error("Speech recognition service is not allowed.");
+            break;
+
+          case "no-speech":
+            toast.error("No speech detected.");
+            break;
+
+          case "audio-capture":
+            toast.error("No microphone found.");
+            break;
+
+          case "network":
+            toast.error("Network error.");
+            break;
+
+          case "language-not-supported":
+            toast.error("Language is not supported.");
+            break;
+
+          default:
+            toast.error("Speech recognition failed.");
+        }
       },
     });
   };

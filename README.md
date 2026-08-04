@@ -104,16 +104,7 @@ Nightline uses a classification layer before generating responses.
 
 User messages are analyzed and classified into different actions:
 
-User Message
-|
-↓
-AI Classifier
-|
-├── Text Response
-|
-├── Image Generation
-|
-└── Blocked Request
+User Message => AI Classifier => Text Response-Image Generation-Blocked Request
 
 The AI returns structured JSON:
 
@@ -157,15 +148,7 @@ json
 
 # 🗄 Firestore Data Model
 
-users
-|
-└── userId
-|
-└── conversations
-|
-└── conversationId
-|
-└── messages
+users => userId => conversations => conversationId => messages
 
 ### User
 
@@ -208,15 +191,14 @@ npm run dev
 
 Create a .env file:
 
-env
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_FIREBASE_MEASUREMENT_ID=
-VITE_GROQ_API_KEY=
+- VITE_FIREBASE_API_KEY=
+- VITE_FIREBASE_AUTH_DOMAIN=
+- VITE_FIREBASE_PROJECT_ID=
+- VITE_FIREBASE_STORAGE_BUCKET=
+- VITE_FIREBASE_MESSAGING_SENDER_ID=
+- VITE_FIREBASE_APP_ID=
+- VITE_FIREBASE_MEASUREMENT_ID=
+- VITE_GROQ_API_KEY=
 
 ---
 

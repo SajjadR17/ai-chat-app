@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import SideBar from "./components/SideBar";
 import ChatPage from "./pages/ChatPage";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,6 +14,33 @@ function App() {
 
   return (
     <>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "var(--bg-card)",
+            color: "var(--text-primary)",
+            borderRadius: "5px",
+            fontSize: "12px",
+            fontFamily: "IBM Plex Mono",
+            padding: "15px",
+            border: "1px solid var(--border)",
+          },
+          success: {
+            iconTheme: {
+              primary: "var(--violet)",
+              secondary: "var(--bg-primary)",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "var(--danger)",
+              secondary: "var(--text-primary)",
+            },
+          },
+        }}
+      />
       {!user ? (
         <>
           <Routes>
