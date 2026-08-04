@@ -246,7 +246,7 @@ function ChatPage() {
                     <span>Now</span>
                   </div>
                   <div className="bubble thinking">
-                    <ThinkingOrb state="working" size={20} speed={1.3} />
+                    <ThinkingOrb theme="light" state="working" size={20} speed={1.3} />
                     Thinking...
                   </div>
                 </div>
@@ -261,7 +261,7 @@ function ChatPage() {
                     <span>Now</span>
                   </div>
                   <div className="bubble thinking">
-                    <ThinkingOrb state="shaping" size={20} speed={1.3} />
+                    <ThinkingOrb theme="light" state="shaping" size={20} speed={1.3} />
                     Creating image ...
                   </div>
                 </div>
