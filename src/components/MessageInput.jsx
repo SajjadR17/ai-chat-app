@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { LuSendHorizontal } from "react-icons/lu";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import { sendUserMessage } from "../lib/chat";
 import { ClipLoader } from "react-spinners";
-import { BiPlus } from "react-icons/bi";
+import { BiMicrophone, BiMicrophoneOff, BiPlus } from "react-icons/bi";
 import { ImImage } from "react-icons/im";
 import { CgClose } from "react-icons/cg";
+import { startListening, stopListening } from "../services/speechToText";
+import { BsPauseBtn } from "react-icons/bs";
 
 function MessageInput({
   sending,
@@ -23,7 +25,36 @@ function MessageInput({
   const { user } = useAuth();
   const [message, setMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [listening, setListening] = useState(false);
+  const messageRef = useRef("");
   const navigate = useNavigate();
+
+  const hasSpeechRecognition =
+    "SpeechRecognition" in window || "webkitSpeechRecognition" in window;
+
+  const stopSpeechToText = () => {
+    stopListening();
+    setListening(false);
+  };
+
+  const startSpeechToText = () => {
+    messageRef.current = message;
+    setListening(true);
+    startListening({
+      lang: "en-US",
+      onResult: (text) => {
+        setMessage(messageRef.current ? `${messageRef.current} ${text}` : text);
+      },
+
+      onEnd: () => {
+        setListening(false);
+      },
+
+      onError: () => {
+        setListening(false);
+      },
+    });
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -34,6 +65,9 @@ function MessageInput({
     setSending(true);
     setError(false);
     setLastUserMessage(message.trim());
+    if (listening) {
+      stopSpeechToText();
+    }
 
     try {
       await sendUserMessage({
@@ -87,13 +121,14 @@ function MessageInput({
             }
           }}
           rows={1}
-          placeholder={placeholder}
+          placeholder={listening ? "Listening..." : placeholder}
         />
         {menuOpen && (
           <div className="message-input-menu mono">
             <div
               className="message-input-menu-card"
               onClick={() => {
+                if (sending) return;
                 setMenuOpen(false);
                 setSelectedTool("create-image");
               }}
@@ -118,12 +153,25 @@ function MessageInput({
                 <CgClose
                   size={15}
                   cursor={"pointer"}
-                  onClick={() => setSelectedTool("auto")}
+                  onClick={() => {
+                    sending ? null : setSelectedTool("auto");
+                  }}
                 />
               </div>
             )}
           </div>
           <div className="message-input-action-btns-right">
+            {hasSpeechRecognition && (
+              <button
+                className="speech-to-text-btn"
+                type="button"
+                disabled={answering || sending}
+                aria-label="Speak"
+                onClick={listening ? stopSpeechToText : startSpeechToText}
+              >
+                {listening ? <BiMicrophoneOff /> : <BiMicrophone />}
+              </button>
+            )}
             <button
               type="submit"
               disabled={message.trim().length === 0 || sending || answering}

@@ -280,16 +280,11 @@ function ChatPage() {
                 </div>
               </div>
             )}
+            <div ref={bottomRef}></div>
             <button className="scroll-to-bottom" onClick={scrollToBottom}>
               <BsArrowDown size={14} />
             </button>
-            <div ref={bottomRef}></div>
           </>
-        )}
-        {messages.length > 1 && (
-          <div className="ai-hint mono">
-            Nightline can make mistakes. check important info.
-          </div>
         )}
       </div>
       <MessageInput

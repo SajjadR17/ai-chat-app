@@ -205,6 +205,7 @@ main {
   background: var(--bg-card);
   border: 1px solid var(--border);
   padding: 2px 6px;
+  margin: 0 5px;
   border-radius: 5px;
   font-family: "JetBrains Mono", monospace;
   font-size: 13px;
@@ -338,10 +339,6 @@ main {
   transition: border-color 0.15s ease;
 }
 
-.message-input:focus-within {
-  border-color: var(--accent-dim);
-}
-
 #msg-input {
   flex: 1;
   background: none;
@@ -369,7 +366,8 @@ main {
   justify-content: space-between;
 }
 
-.message-input-action-btns-left {
+.message-input-action-btns-left,
+.message-input-action-btns-right {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -388,7 +386,8 @@ main {
 }
 
 .message-input-action-btn,
-.send-btn {
+.send-btn,
+.speech-to-text-btn {
   width: 34px;
   height: 34px;
   border-radius: 5px;
@@ -400,7 +399,8 @@ main {
   transition: all 0.2s ease;
 }
 
-.message-input-action-btn {
+.message-input-action-btn,
+.speech-to-text-btn {
   background: var(--bg-hover);
   color: var(--text-secondary);
 }
