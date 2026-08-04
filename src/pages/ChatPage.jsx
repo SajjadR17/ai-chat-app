@@ -282,6 +282,11 @@ function ChatPage() {
                 </div>
               </div>
             )}
+            {messages.length > 1 && (
+              <div className="ai-hint mono">
+                Nightline can make mistakes. Check important info.
+              </div>
+            )}
             <button className="scroll-to-bottom" onClick={scrollToBottom}>
               <BsArrowDown size={14} />
             </button>
