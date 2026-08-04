@@ -24,7 +24,7 @@ import { FiCheck } from "react-icons/fi";
 function ChatPage() {
   const { chatId } = useParams();
   const { user, userProfile } = useAuth();
-  const bottomRef = useRef(null);
+  const chatRef = useRef(null);
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
@@ -87,7 +87,9 @@ function ChatPage() {
   }, [user, chatId]);
 
   const scrollToBottom = () => {
-    bottomRef.current?.scrollIntoView({
+    if (!chatRef.current) return;
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
       behavior: "smooth",
     });
   };
@@ -167,7 +169,7 @@ function ChatPage() {
 
   return (
     <>
-      <div className="chat-scroll">
+      <div className="chat-scroll" ref={chatRef}>
         {chatId === "new" ? (
           <div className="empty-state">
             <div className="empty-state-dot"></div>
@@ -280,7 +282,6 @@ function ChatPage() {
                 </div>
               </div>
             )}
-            <div ref={bottomRef}></div>
             <button className="scroll-to-bottom" onClick={scrollToBottom}>
               <BsArrowDown size={14} />
             </button>
