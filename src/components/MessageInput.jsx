@@ -4,7 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 import { sendUserMessage } from "../lib/chat";
 import { ClipLoader } from "react-spinners";
-import { BiMicrophone, BiMicrophoneOff, BiPlus } from "react-icons/bi";
+import {
+  BiMicrophone,
+  BiMicrophoneOff,
+  BiPlus,
+  BiSearch,
+} from "react-icons/bi";
 import { ImImage } from "react-icons/im";
 import { CgClose } from "react-icons/cg";
 import { startListening, stopListening } from "../services/speechToText";
@@ -16,6 +21,7 @@ function MessageInput({
   answering,
   setError,
   setAnswering,
+  setSearching,
   setSending,
   setCreatingImg,
   setLastUserMessage,
@@ -108,6 +114,7 @@ function MessageInput({
         message: text,
         navigate,
         setAnswering,
+        setSearching,
         setMessage,
         setCreatingImg,
         retry: false,
@@ -165,6 +172,17 @@ function MessageInput({
             >
               <ImImage size={15} />
               Create image
+            </div>
+            <div
+              className="message-input-menu-card"
+              onClick={() => {
+                if (sending) return;
+                setMenuOpen(false);
+                setSelectedTool("web-search");
+              }}
+            >
+              <BiSearch size={15} />
+              Web search
             </div>
           </div>
         )}

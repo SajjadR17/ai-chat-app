@@ -14,22 +14,6 @@ export function AuthProvider({ children }) {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
   const [authError, setAuthError] = useState("");
-  const [isOnline, setIsOnline] = useState(
-    typeof navigator !== "undefined" ? navigator.onLine : true,
-  );
-
-  useEffect(() => {
-    const online = () => setIsOnline(true);
-    const offline = () => setIsOnline(false);
-
-    window.addEventListener("online", online);
-    window.addEventListener("offline", offline);
-
-    return () => {
-      window.removeEventListener("online", online);
-      window.removeEventListener("offline", offline);
-    };
-  }, []);
 
   useEffect(() => {
     let unsubscribeProfile = null;
@@ -88,17 +72,6 @@ export function AuthProvider({ children }) {
         <ClipLoader color="var(--text-secondary)" size={30} />
         <span className="mono" style={{ color: "var(--text-secondary)" }}>
           LOADING NIGHTLINE
-        </span>
-      </div>
-    );
-  }
-
-  if (!isOnline) {
-    return (
-      <div className="app-no-internet-err">
-        <BsWifiOff size={40} color="var(--text-secondary)" />
-        <span className="mono" style={{ color: "var(--text-secondary)" }}>
-          NO INTERNET CONNECTION
         </span>
       </div>
     );

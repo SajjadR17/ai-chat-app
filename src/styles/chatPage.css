@@ -110,13 +110,17 @@ main {
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-left: 2px solid var(--violet);
-  padding: 11px 14px;
+  padding: 15px;
   border-radius: 0 8px 8px 8px;
   font-size: 14px;
   line-height: 1.6;
   color: var(--text-primary);
   display: block;
   overflow-wrap: break-word;
+}
+
+.bubble.fa-lang {
+  direction: rtl;
 }
 
 .bubble.error {
@@ -150,7 +154,9 @@ main {
   border: 1px solid var(--border);
 }
 
-.bubble.thinking {
+.bubble.thinking,
+.bubble.searching,
+.bubble.creating-img {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -163,8 +169,18 @@ main {
   background: var(--bg-card);
 }
 
+.bubble .search-time {
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  direction: ltr;
+}
+
 .bubble p {
   margin: 0 0 12px;
+}
+
+.bubble hr {
+  margin: 15px 0;
 }
 
 .bubble p:last-child {
@@ -175,7 +191,7 @@ main {
 .bubble h2,
 .bubble h3,
 .bubble h4 {
-  margin: 18px 0 10px;
+  margin-bottom: 10px;
   color: var(--text-primary);
   font-weight: 700;
 }
@@ -194,7 +210,7 @@ main {
 
 .bubble ul,
 .bubble ol {
-  padding-left: 22px;
+  padding: 0 20px;
   margin: 10px 0;
 }
 
@@ -219,20 +235,36 @@ main {
   font-size: 13px;
 }
 
+.bubble pre pre {
+  scrollbar-width: none;
+}
+
 .bubble pre code {
   background: transparent;
   border: none;
+  scrollbar-width: none;
   padding: 0;
 }
 
 .bubble blockquote {
   margin: 15px 0;
-  padding-left: 14px;
+  padding: 0 14px;
   border-left: 3px solid var(--accent-dim);
   color: var(--text-secondary);
 }
+
+.bubble.fa-lang blockquote {
+  border-left: none;
+  border-right: 3px solid var(--accent-dim);
+}
+
+.bubble img{
+margin: 10px 0;
+}
+
 .bubble a {
-  color: var(--accent);
+  color: var(--violet);
+  margin: 0 5px;
   text-decoration: none;
 }
 
@@ -301,10 +333,10 @@ main {
 
 .message-input-menu {
   position: absolute;
-  top: -55px;
+  top: -85px;
   left: 0;
   right: 0;
-  background-color: var(--bg-card);
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 5px;

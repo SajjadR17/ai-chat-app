@@ -12,8 +12,10 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../../firebase";
-import { askAI } from "../services/ai";
 import { generateImage } from "../services/imgAi";
+import { searchWeb } from "../services/search";
+import { aiRouter } from "../services/aiRouter";
+import { aiAnswer } from "../services/aiAnswer";
 
 const createConversation = async (uid) => {
   const docRef = await addDoc(collection(db, "users", uid, "conversations"), {
@@ -38,6 +40,8 @@ const addMessage = async (
   content,
   type = "text",
   lang = "en-US",
+  sources = [],
+  searchTime = 0,
 ) => {
   await addDoc(
     collection(db, "users", uid, "conversations", chatId, "messages"),
@@ -47,6 +51,8 @@ const addMessage = async (
       type,
       createdAt: serverTimestamp(),
       lang,
+      ...(sources.length > 0 && { sources }),
+      ...(searchTime > 0 && { searchTime }),
     },
   );
 };
@@ -73,7 +79,7 @@ export const formatMessageTime = (timestamp) => {
   });
 };
 
-const getConversationHistory = async (uid, chatId) => {
+const getConversationHistory = async (uid, chatId, limit) => {
   const messagesRef = collection(
     db,
     "users",
@@ -83,7 +89,7 @@ const getConversationHistory = async (uid, chatId) => {
     "messages",
   );
 
-  const q = query(messagesRef, orderBy("createdAt", "asc"), limitToLast(6));
+  const q = query(messagesRef, orderBy("createdAt", "asc"), limitToLast(limit));
 
   const snapshot = await getDocs(q);
 
@@ -134,6 +140,7 @@ export const sendUserMessage = async ({
   message,
   navigate,
   setAnswering,
+  setSearching,
   setMessage,
   setCreatingImg,
   retry,
@@ -158,43 +165,90 @@ export const sendUserMessage = async ({
 
   try {
     setAnswering?.(true);
-    const history = await getConversationHistory(uid, currentChatId);
-    const data = await askAI(message, history, chatId === "new", selectedTool);
 
-    if (chatId === "new") {
-      await updateConversationTitle(uid, currentChatId, data.title);
+    const routeHistory = await getConversationHistory(uid, currentChatId, 6);
+    const answerHistory = await getConversationHistory(uid, currentChatId, 8);
+
+    const route = await aiRouter(
+      message,
+      routeHistory,
+      selectedTool,
+      chatId === "new",
+    );
+
+    if (route.type === "blocked") {
+      await addMessage(
+        uid,
+        currentChatId,
+        "assistant",
+        route.answer,
+        route.type,
+      );
+
+      return;
+    }
+
+    let data;
+    let searchData;
+
+    if (route.type === "image") {
+      data = route;
+    } else if (route.type === "search") {
+      setAnswering?.(false);
+      setSearching?.(true);
+
+      searchData = await searchWeb(route.searchQuery);
+
+      setSearching?.(false);
+      setAnswering?.(true);
+
+      data = await aiAnswer(message, answerHistory, searchData);
+    } else {
+      data = await aiAnswer(message, answerHistory, null);
+    }
+
+    if (chatId === "new" && route.title) {
+      await updateConversationTitle(uid, currentChatId, route.title);
     }
 
     if (data.type === "image") {
-      setAnswering(false);
-      setCreatingImg(true);
+      setAnswering?.(false);
+      setCreatingImg?.(true);
+
+      console.log(data.prompt);
       const imageUrl = await generateImage(data.prompt);
-      setCreatingImg(false);
+
+      setCreatingImg?.(false);
+
       await addMessage(
         uid,
         currentChatId,
         "assistant",
         `![generated image](${imageUrl})`,
-        "image",
+        data.type,
       );
 
       return;
-    } else {
-      setAnswering?.(false);
-      await addMessage(
-        uid,
-        currentChatId,
-        "assistant",
-        data.answer,
-        data.type,
-        data.lang,
-      );
     }
+
+    setAnswering?.(false);
+
+    await addMessage(
+      uid,
+      currentChatId,
+      "assistant",
+      data.answer,
+      data.type,
+      data.lang,
+      data.sources || [],
+      searchData?.searchTime || 0,
+    );
 
     await updateConversation(uid, currentChatId);
   } finally {
     setAnswering?.(false);
-    setCreatingImg(false);
-    setSelectedTool("auto");
+    setSearching?.(false);
+    setCreatingImg?.(false);
+    setSelectedTool?.("auto");
   }
 };

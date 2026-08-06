@@ -36,6 +36,7 @@ function ChatPage() {
   const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [retrying, setRetrying] = useState(false);
   const [creatingImg, setCreatingImg] = useState(false);
   const [copyId, setCopyId] = useState(null);
@@ -211,7 +212,7 @@ function ChatPage() {
                         {copyId === message.id ? <FiCheck /> : <BiCopy />}
                       </button>
                     )}
-                    {"speechSynthesis" in window && message.type === "text" ? (
+                    {"speechSynthesis" in window && message.type === "text" && message.role === "assistant" ? (
                       isSpeaking() && speakingId === message.id ? (
                         <BiStopCircle
                           className="cancel-read-msg-btn"
@@ -231,8 +232,25 @@ function ChatPage() {
                       )
                     ) : null}
                   </div>
-                  <div className="bubble">
+                  <div
+                    className={`bubble ${message.lang === "fa-IR" ? "fa-lang" : ""}`}
+                  >
+                    {message.searchTime && <div className="search-time mono">Searched in {message.searchTime}s</div>}
                     <MarkdownRenderer content={message.content} />
+                    {message.sources?.length > 0 && (
+                      <span className="msg-sources">
+                        {message.sources.map((s) => (
+                          <a
+                            href={s.url}
+                            target="_blank"
+                            className="mono"
+                            rel="noopener noreferrer"
+                          >
+                            {s.siteName}
+                          </a>
+                        ))}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -246,7 +264,12 @@ function ChatPage() {
                     <span>Now</span>
                   </div>
                   <div className="bubble thinking">
-                    <ThinkingOrb theme="light" state="working" size={20} speed={1.3} />
+                    <ThinkingOrb
+                      theme="dark"
+                      state="composing"
+                      size={20}
+                      speed={1.3}
+                    />
                     Thinking...
                   </div>
                 </div>
@@ -260,9 +283,34 @@ function ChatPage() {
                     <span className="who">Nightline</span>
                     <span>Now</span>
                   </div>
-                  <div className="bubble thinking">
-                    <ThinkingOrb theme="light" state="shaping" size={20} speed={1.3} />
+                  <div className="bubble creating-img">
+                    <ThinkingOrb
+                      theme="dark"
+                      state="shaping"
+                      size={20}
+                      speed={1.3}
+                    />
                     Creating image ...
+                  </div>
+                </div>
+              </div>
+            )}
+            {searching && (
+              <div className={`msg-row assistant`}>
+                <div className="msg-avatar mono">NL</div>
+                <div className="msg-body">
+                  <div className="msg-meta mono">
+                    <span className="who">Nightline</span>
+                    <span>Now</span>
+                  </div>
+                  <div className="bubble searching">
+                    <ThinkingOrb
+                      theme="dark"
+                      state="searching"
+                      size={20}
+                      speed={1.3}
+                    />
+                    Searching ...
                   </div>
                 </div>
               </div>
@@ -303,6 +351,7 @@ function ChatPage() {
       <MessageInput
         setSending={setSending}
         setAnswering={setAnswering}
+        setSearching={setSearching}
         sending={sending}
         setError={setError}
         answering={answering}
