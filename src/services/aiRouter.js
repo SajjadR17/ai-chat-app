@@ -374,7 +374,5 @@ always follow that intention.
     throw new Error("Empty router response");
   }
 
-  console.log(content);
-
   return JSON.parse(content);
 };

@@ -141,7 +141,7 @@ OUTPUT FORMAT:
     },
 
     body: JSON.stringify({
-      model: "openai/gpt-oss-20b",
+      model: "openai/gpt-oss-120b",
 
       response_format: {
         type: "json_object",
@@ -206,11 +206,8 @@ OUTPUT FORMAT:
 
   const data = await response.json();
 
-  console.log(data);
-
   const content = data.choices?.[0]?.message?.content;
 
-  console.log(content);
   if (!content) {
     throw new Error("Empty AI response");
   }

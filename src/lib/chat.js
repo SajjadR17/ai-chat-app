@@ -214,8 +214,7 @@ export const sendUserMessage = async ({
     if (data.type === "image") {
       setAnswering?.(false);
       setCreatingImg?.(true);
-
-      console.log(data.prompt);
+      
       const imageUrl = await generateImage(data.prompt);
 
       setCreatingImg?.(false);
