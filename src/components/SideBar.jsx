@@ -173,7 +173,10 @@ function SideBar({ menuOpen, setMenuOpen }) {
         />
       )}
       {searchModalOpen && (
-        <SearchModal setSearchModalOpen={setSearchModalOpen} />
+        <SearchModal
+          setMenuOpen={setMenuOpen}
+          setSearchModalOpen={setSearchModalOpen}
+        />
       )}
     </aside>
   );

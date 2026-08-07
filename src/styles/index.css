@@ -61,15 +61,7 @@ html {
 
 body {
   min-height: 100vh;
-  font-family:
-    "Geist Sans",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: "Vazirmatn", "Geist Sans", sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   height: 100%;
@@ -136,7 +128,7 @@ button:disabled {
   height: 100vh;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .app {
     grid-template-columns: 1fr;
     grid-template-areas: "chat";

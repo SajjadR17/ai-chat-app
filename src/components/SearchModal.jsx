@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FiMessageSquare } from "react-icons/fi";
 import { createPortal } from "react-dom";
 
-function SearchModal({ setSearchModalOpen }) {
+function SearchModal({ setSearchModalOpen, setMenuOpen }) {
   const [searchValue, setSearchValue] = useState("");
   const [conversations, setConversations] = useState([]);
   const [displayConversations, setDisplayConversations] = useState([]);
@@ -84,6 +84,7 @@ function SearchModal({ setSearchModalOpen }) {
               onClick={() => {
                 navigate(`/chat/${c.id}`);
                 setSearchModalOpen(false);
+                setMenuOpen(false);
               }}
             >
               <FiMessageSquare />

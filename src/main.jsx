@@ -5,6 +5,7 @@ import "./styles/index.css";
 import App from "./App.jsx";
 import { AuthProvider } from "./contexts/authContext.jsx";
 import { AiProvider } from "./contexts/aiContext.jsx";
+import "@fontsource/vazirmatn";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

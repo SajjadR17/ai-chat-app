@@ -258,8 +258,8 @@ main {
   border-right: 3px solid var(--accent-dim);
 }
 
-.bubble img{
-margin: 10px 0;
+.bubble img {
+  margin: 10px 0;
 }
 
 .bubble a {
@@ -487,16 +487,16 @@ margin: 10px 0;
     max-width: 85%;
   }
 
+  .msg-avatar {
+    display: none;
+  }
+
   .msg-row {
     padding: 0 20px;
   }
 }
 
 @media (max-width: 480px) {
-  .msg-avatar {
-    display: none;
-  }
-
   .msg-body {
     max-width: 95%;
   }
