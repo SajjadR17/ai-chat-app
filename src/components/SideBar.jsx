@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiPencil, BiPlus, BiSearch, BiTrash } from "react-icons/bi";
+import { BiLogOut, BiPencil, BiPlus, BiSearch, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
@@ -11,6 +11,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import DeleteChatModal from "./DeleteChatModal";
 import EditChatModal from "./EditChatModal";
 import SearchModal from "./SearchModal";
+import { logout } from "../utils/auth";
 
 function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
@@ -19,7 +20,7 @@ function SideBar({ menuOpen, setMenuOpen }) {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const location = useLocation();
   const chatId = location.pathname.replace("/chat/", "");
   const navigate = useNavigate();
@@ -158,6 +159,25 @@ function SideBar({ menuOpen, setMenuOpen }) {
           ))}
         </div>
       </div>
+      {user && userProfile && (
+        <div className="user-profile-card">
+          <div className="user-profile-content">
+            <div className="user-profile-avatar mono">
+              {userProfile.shortName}
+            </div>
+            <div className="user-profile-info">
+              <span className="username">{userProfile.username}</span>
+              <span className="user-role mono">{userProfile.role}</span>
+            </div>
+          </div>
+          <BiLogOut
+            size={15}
+            color="var(--text-secondary)"
+            onClick={() => logout()}
+            cursor={"pointer"}
+          />
+        </div>
+      )}
       {deleteModalOpen && (
         <DeleteChatModal
           chat={selectedChat}

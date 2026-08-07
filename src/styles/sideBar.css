@@ -45,11 +45,6 @@ aside {
   min-height: 0;
 }
 
-.conversations-title {
-  color: var(--text-secondary);
-  margin-left: 5px;
-}
-
 .conversations-list {
   display: flex;
   flex-direction: column;
@@ -103,6 +98,7 @@ aside {
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
+  padding-top: 2px;
   text-overflow: ellipsis;
 }
 
@@ -323,6 +319,43 @@ aside {
   color: var(--danger);
   margin: -10px 0;
   animation: errorFade 0.15s ease;
+}
+
+.user-profile-card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.user-profile-content{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-profile-avatar{
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background-color: var(--bg-card);
+}
+
+.user-profile-info{
+  display: flex;
+  flex-direction: column;
+}
+
+.username{
+  font-size: 13px;
+}
+
+.user-role{
+  color: var(--text-secondary);
 }
 
 @keyframes errorFade {

@@ -183,12 +183,21 @@ function ChatPage() {
         {chatId === "new" ? (
           <div className="empty-state">
             <div className="empty-state-dot"></div>
-            <h2>
-              {userProfile?.username
-                ? `Hi ${userProfile?.username}`
-                : "Start the conversation"}
-            </h2>
-            <span>Send a message below so Nightline will reply</span>
+            {userProfile ? (
+              <>
+                <h2>
+                  {userProfile?.username
+                    ? `Hi ${userProfile?.username}`
+                    : "Start the conversation"}
+                </h2>
+                <span>Send a message below so Nightline will reply</span>
+              </>
+            ) : (
+              <>
+                <h2>You are offline</h2>
+                <span>Check your connection and try again</span>
+              </>
+            )}
           </div>
         ) : (
           <>
