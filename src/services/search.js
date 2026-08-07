@@ -24,7 +24,6 @@ export const searchWeb = async (query) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return {
       answer: data.answer,
       searchTime: data.response_time,

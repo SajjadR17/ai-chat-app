@@ -1,16 +1,28 @@
 import { BiMenu } from "react-icons/bi";
 import "../styles//header.css";
-import { IoClose } from "react-icons/io5";
+import { IoChevronDown, IoChevronUp, IoClose } from "react-icons/io5";
 import { useAuth } from "../contexts/authContext";
 import { LuLogOut, LuUser } from "react-icons/lu";
+import { useAi } from "../contexts/aiContext";
 import { useState } from "react";
-import { logout } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
 
 function Header({ menuOpen, setMenuOpen }) {
   const { user, userProfile } = useAuth();
-  const navigate = useNavigate();
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const { selectedModel, setSelectedModel } = useAi();
+  const [selectModelMenuOpen, setSelectModelMenuOpen] = useState(false);
+  const models = [
+    { name: "openai/gpt-oss-120b", power: "Best Quality" },
+    { name: "openai/gpt-oss-20b", power: "Fast Response" },
+    { name: "llama-3.1-8b-instant", power: "Fastest" },
+    { name: "qwen/qwen3.6-27b", power: "Coding" },
+  ];
+
+  const modelNames = {
+    "openai/gpt-oss-120b": "GPT OSS 120B",
+    "openai/gpt-oss-20b": "GPT OSS 20B",
+    "llama-3.1-8b-instant": "Llama 3.1 8B",
+    "qwen/qwen3.6-27b": "Qwen 3.6 27B",
+  };
 
   return (
     <header>
@@ -43,33 +55,30 @@ function Header({ menuOpen, setMenuOpen }) {
               {!user || !userProfile ? "offline" : "online"}
             </span>
           </div>
-          {user && userProfile && (
-            <>
-              <div
-                className="user-profile-card mono"
-                onClick={() => setProfileMenuOpen((prev) => !prev)}
-              >
-                {userProfile?.shortName}
-              </div>
-              {profileMenuOpen && (
-                <div className="profile-card-menu mono">
-                  <div className="profile-card-menu-username">
-                    <LuUser size={15} color="var(--text-primary)" />
-                    {userProfile?.username}
-                  </div>
+          <div
+            className="model-type-selector mono"
+            onClick={() => setSelectModelMenuOpen((prev) => !prev)}
+          >
+            {modelNames[selectedModel]}
+            {selectModelMenuOpen ? <IoChevronUp /> : <IoChevronDown />}
+            {selectModelMenuOpen && (
+              <div className="model-select-menu">
+                {models.map((m) => (
                   <button
-                    className="profile-card-menu-logout-btn"
-                    onClick={async () => {
-                      await logout();
-                      navigate("/login");
+                    className="model-select-card"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedModel(m.name);
+                      setSelectModelMenuOpen(false);
                     }}
                   >
-                    <LuLogOut size={15} color="var(--text-primary)" /> Logout
+                    <span>{modelNames[m.name]}</span>
+                    <span>{`(${m.power})`}</span>
                   </button>
-                </div>
-              )}
-            </>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </header>

@@ -15,6 +15,7 @@ import { CgClose } from "react-icons/cg";
 import { startListening, stopListening } from "../services/speechToText";
 import { BsPauseBtn } from "react-icons/bs";
 import toast from "react-hot-toast";
+import { useAi } from "../contexts/aiContext";
 
 function MessageInput({
   sending,
@@ -30,6 +31,7 @@ function MessageInput({
 }) {
   const { chatId } = useParams();
   const { user } = useAuth();
+  const { selectedModel } = useAi();
   const [message, setMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [listening, setListening] = useState(false);
@@ -118,6 +120,7 @@ function MessageInput({
         setMessage,
         setCreatingImg,
         retry: false,
+        selectedModel,
       });
     } catch (err) {
       console.error(err);

@@ -144,6 +144,7 @@ export const sendUserMessage = async ({
   setMessage,
   setCreatingImg,
   retry,
+  selectedModel,
 }) => {
   let currentChatId = chatId;
 
@@ -202,9 +203,9 @@ export const sendUserMessage = async ({
       setSearching?.(false);
       setAnswering?.(true);
 
-      data = await aiAnswer(message, answerHistory, searchData);
+      data = await aiAnswer(message, answerHistory, searchData, selectedModel);
     } else {
-      data = await aiAnswer(message, answerHistory, null);
+      data = await aiAnswer(message, answerHistory, null, selectedModel);
     }
 
     if (chatId === "new" && route.title) {
@@ -214,7 +215,7 @@ export const sendUserMessage = async ({
     if (data.type === "image") {
       setAnswering?.(false);
       setCreatingImg?.(true);
-      
+
       const imageUrl = await generateImage(data.prompt);
 
       setCreatingImg?.(false);
@@ -244,10 +245,10 @@ export const sendUserMessage = async ({
     );
 
     await updateConversation(uid, currentChatId);
+    setSelectedTool?.("auto");
   } finally {
     setAnswering?.(false);
     setSearching?.(false);
     setCreatingImg?.(false);
-    setSelectedTool?.("auto");
   }
 };

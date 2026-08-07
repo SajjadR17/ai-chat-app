@@ -21,10 +21,12 @@ import { BiCopy, BiDownload, BiStopCircle, BiVolumeFull } from "react-icons/bi";
 import { isSpeaking, speak, stopSpeaking } from "../services/speech";
 import { FiCheck } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { useAi } from "../contexts/aiContext";
 
 function ChatPage() {
   const { chatId } = useParams();
   const { user, userProfile } = useAuth();
+  const { selectedModel } = useAi();
   const chatRef = useRef(null);
   const navigate = useNavigate();
 
@@ -114,24 +116,28 @@ function ChatPage() {
   };
 
   const retry = async () => {
-    if (retrying) return;
+    if (retrying || !lastUserMessage || !user?.uid) return;
     setRetrying(true);
     setError(false);
 
     try {
       await sendUserMessage({
         uid: user.uid,
+        selectedTool,
+        setSelectedTool,
         chatId,
         message: lastUserMessage,
         navigate,
         setAnswering,
+        setSearching,
+        setCreatingImg,
         retry: true,
+        selectedModel,
       });
     } catch {
       setError(true);
     } finally {
       setRetrying(false);
-      setError(false);
     }
   };
 
@@ -212,7 +218,9 @@ function ChatPage() {
                         {copyId === message.id ? <FiCheck /> : <BiCopy />}
                       </button>
                     )}
-                    {"speechSynthesis" in window && message.type === "text" && message.role === "assistant" ? (
+                    {"speechSynthesis" in window &&
+                    message.type === "text" &&
+                    message.role === "assistant" ? (
                       isSpeaking() && speakingId === message.id ? (
                         <BiStopCircle
                           className="cancel-read-msg-btn"
@@ -235,12 +243,17 @@ function ChatPage() {
                   <div
                     className={`bubble ${message.lang === "fa-IR" ? "fa-lang" : ""}`}
                   >
-                    {message.searchTime && <div className="search-time mono">Searched in {message.searchTime}s</div>}
+                    {message.searchTime && (
+                      <div className="search-time mono">
+                        Searched in {message.searchTime}s
+                      </div>
+                    )}
                     <MarkdownRenderer content={message.content} />
                     {message.sources?.length > 0 && (
                       <span className="msg-sources">
                         {message.sources.map((s) => (
                           <a
+                            key={s.siteName}
                             href={s.url}
                             target="_blank"
                             className="mono"
