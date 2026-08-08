@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import {
   collection,
+  deleteDoc,
+  doc,
   limitToLast,
   onSnapshot,
   orderBy,
@@ -30,17 +32,16 @@ function ChatPage() {
   const chatRef = useRef(null);
   const navigate = useNavigate();
 
-  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedTool, setSelectedTool] = useState("auto");
-  const [speakingId, setSpeakingId] = useState(null);
-  const [error, setError] = useState(false);
-  const [lastUserMessage, setLastUserMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [answering, setAnswering] = useState(false);
   const [searching, setSearching] = useState(false);
-  const [retrying, setRetrying] = useState(false);
   const [creatingImg, setCreatingImg] = useState(false);
+  const [error, setError] = useState(false);
+
+  const [messages, setMessages] = useState([]);
+  const [selectedTool, setSelectedTool] = useState("auto");
+  const [speakingId, setSpeakingId] = useState(null);
   const [copyId, setCopyId] = useState(null);
 
   useEffect(() => {
@@ -115,9 +116,18 @@ function ChatPage() {
     }
   };
 
+  const getLastUserMessage = () => {
+    return [...messages].reverse().find((m) => m.role === "user");
+  };
+
   const retry = async () => {
-    if (retrying || !lastUserMessage || !user?.uid) return;
-    setRetrying(true);
+    if (sending || !user?.uid) return;
+
+    const userLastMessage = getLastUserMessage();
+
+    if (!userLastMessage?.content) return;
+
+    setSending(true);
     setError(false);
 
     try {
@@ -126,7 +136,7 @@ function ChatPage() {
         selectedTool,
         setSelectedTool,
         chatId,
-        message: lastUserMessage,
+        message: userLastMessage.content,
         navigate,
         setAnswering,
         setSearching,
@@ -137,7 +147,55 @@ function ChatPage() {
     } catch {
       setError(true);
     } finally {
-      setRetrying(false);
+      setSending(false);
+    }
+  };
+
+  const regenerateMsg = async (message) => {
+    if (sending || !user?.uid || !message) return;
+
+    const lastMessage = messages[messages.length - 1];
+
+    if (lastMessage?.id !== message.id || message.role !== "assistant") {
+      return;
+    }
+
+    const userLastMessage = getLastUserMessage();
+
+    if (!userLastMessage?.content) return;
+
+    const assistantMessageRef = doc(
+      db,
+      "users",
+      user.uid,
+      "conversations",
+      chatId,
+      "messages",
+      message.id,
+    );
+
+    setError(false);
+
+    try {
+      await deleteDoc(assistantMessageRef);
+      setSending(true);
+      await sendUserMessage({
+        uid: user.uid,
+        selectedTool,
+        setSelectedTool,
+        chatId,
+        message: userLastMessage.content,
+        navigate,
+        setAnswering,
+        setSearching,
+        setCreatingImg,
+        retry: true,
+        selectedModel,
+      });
+    } catch {
+      setError(true);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -201,7 +259,7 @@ function ChatPage() {
           </div>
         ) : (
           <>
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div key={message.id} className={`msg-row ${message.role}`}>
                 <div className="msg-avatar mono">
                   {message.role === "assistant" ? "NL" : userProfile?.shortName}
@@ -248,6 +306,13 @@ function ChatPage() {
                         />
                       )
                     ) : null}
+                    {index === messages.length - 1 &&
+                      message.role === "assistant" && (
+                        <LuRotateCw
+                          className="regenerate-msg-btn"
+                          onClick={() => regenerateMsg(message)}
+                        />
+                      )}
                   </div>
                   <div
                     className={`bubble ${message.lang === "fa-IR" ? "fa-lang" : ""}`}
@@ -350,11 +415,12 @@ function ChatPage() {
                     <button
                       className="retry-btn mono"
                       onClick={retry}
-                      disabled={answering}
+                      disabled={sending}
                     >
                       <LuRotateCw />
                       Retry
                     </button>
+                    or Change the Model.
                   </div>
                 </div>
               </div>
@@ -378,7 +444,6 @@ function ChatPage() {
         setError={setError}
         answering={answering}
         setCreatingImg={setCreatingImg}
-        setLastUserMessage={setLastUserMessage}
         selectedTool={selectedTool}
         setSelectedTool={setSelectedTool}
       />

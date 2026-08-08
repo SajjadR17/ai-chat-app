@@ -25,7 +25,6 @@ function MessageInput({
   setSearching,
   setSending,
   setCreatingImg,
-  setLastUserMessage,
   selectedTool,
   setSelectedTool,
 }) {
@@ -102,7 +101,6 @@ function MessageInput({
 
     setSending(true);
     setError(false);
-    setLastUserMessage(message.trim());
     if (listening) {
       stopSpeechToText();
     }

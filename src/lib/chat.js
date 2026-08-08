@@ -167,12 +167,11 @@ export const sendUserMessage = async ({
   try {
     setAnswering?.(true);
 
-    const routeHistory = await getConversationHistory(uid, currentChatId, 6);
-    const answerHistory = await getConversationHistory(uid, currentChatId, 8);
+    const history = await getConversationHistory(uid, currentChatId, 6);
 
     const route = await aiRouter(
       message,
-      routeHistory,
+      history,
       selectedTool,
       chatId === "new",
     );
@@ -203,9 +202,9 @@ export const sendUserMessage = async ({
       setSearching?.(false);
       setAnswering?.(true);
 
-      data = await aiAnswer(message, answerHistory, searchData, selectedModel);
+      data = await aiAnswer(message, history, searchData, selectedModel);
     } else {
-      data = await aiAnswer(message, answerHistory, null, selectedModel);
+      data = await aiAnswer(message, history, null, selectedModel);
     }
 
     if (chatId === "new" && route.title) {
@@ -228,6 +227,7 @@ export const sendUserMessage = async ({
         data.type,
       );
 
+      setSelectedTool?.("auto");
       return;
     }
 

@@ -89,7 +89,8 @@ main {
 .copy-msg-btn,
 .download-img-btn,
 .cancel-read-msg-btn,
-.read-msg-btn {
+.read-msg-btn,
+.regenerate-msg-btn {
   background-color: transparent;
   border: none;
   color: var(--text-muted);

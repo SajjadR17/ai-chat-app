@@ -133,6 +133,7 @@ OUTPUT FORMAT:
   "lang": "answer language code like en-US or fa-IR",
   ${searchData && `"sources": [{siteName:"searchData site name",url:"searchData site url"}]`}
 }`;
+
   const response = await fetch(GROQ_URL, {
     method: "POST",
 
@@ -176,31 +177,6 @@ OUTPUT FORMAT:
 
   if (!response.ok) {
     const error = await response.json();
-
-    if (
-      error.error?.code === "rate_limit_exceeded" &&
-      error.error?.message.includes("tokens per day")
-    ) {
-      const waitTime =
-        error.error.message.match(/Please try again in (.+?)\./)?.[1] ||
-        "later";
-
-      const formatWaitTime = (text) => {
-        const match = text.match(/(\d+)m(?:(\d+(?:\.\d+)?)s)?/);
-
-        if (!match) return text;
-
-        const minutes = Number(match[1]);
-
-        return `${minutes}min`;
-      };
-
-      return {
-        type: "text",
-        answer: `Daily AI limit reached. Please try again in ${formatWaitTime(waitTime)}.`,
-        lang: "en-US",
-      };
-    }
 
     throw new Error(error.error?.message || "Nightline AI Error");
   }
