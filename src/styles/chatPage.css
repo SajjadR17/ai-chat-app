@@ -79,7 +79,7 @@ main {
 
 .msg-meta {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   align-items: baseline;
   margin-bottom: 10px;
@@ -90,7 +90,8 @@ main {
 .download-img-btn,
 .cancel-read-msg-btn,
 .read-msg-btn,
-.regenerate-msg-btn {
+.regenerate-msg-btn,
+.edit-msg-btn {
   background-color: transparent;
   border: none;
   color: var(--text-muted);
@@ -105,6 +106,59 @@ main {
 .msg-meta .who {
   color: var(--text-secondary);
   font-weight: 600;
+}
+
+.edit-input-container {
+  display: flex;
+  min-width: 270px;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.edit-msg-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-msg-save-btn,
+.edit-msg-cancel-btn {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  transition: 0.15s ease;
+}
+
+.edit-msg-save-btn:hover,
+.edit-msg-cancel-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.edit-msg-save-btn:active,
+.edit-msg-cancel-btn:active {
+  transform: scale(0.98);
+}
+
+.edit-msg-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.edit-msg-input:focus {
+  outline: none;
 }
 
 .bubble {

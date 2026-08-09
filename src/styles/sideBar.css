@@ -306,11 +306,7 @@ aside {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
-.edit-chat-title-input:focus {
-  background: var(--bg-hover);
-  outline: none;
-}
-
+.edit-chat-title-input:focus
 .search-input:focus {
   outline: none;
 }

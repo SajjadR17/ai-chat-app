@@ -12,6 +12,8 @@ import {
   onSnapshot,
   orderBy,
   query,
+  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useAuth } from "../contexts/authContext";
@@ -19,11 +21,18 @@ import { formatMessageTime, sendUserMessage } from "../lib/chat";
 import { ThinkingOrb } from "thinking-orbs";
 import MarkdownRenderer from "../components/MarkdownRenderer";
 import { BsArrowDown } from "react-icons/bs";
-import { BiCopy, BiDownload, BiStopCircle, BiVolumeFull } from "react-icons/bi";
+import {
+  BiCopy,
+  BiDownload,
+  BiPencil,
+  BiStopCircle,
+  BiVolumeFull,
+} from "react-icons/bi";
 import { isSpeaking, speak, stopSpeaking } from "../services/speech";
 import { FiCheck } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { useAi } from "../contexts/aiContext";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 function ChatPage() {
   const { chatId } = useParams();
@@ -43,6 +52,8 @@ function ChatPage() {
   const [selectedTool, setSelectedTool] = useState("auto");
   const [speakingId, setSpeakingId] = useState(null);
   const [copyId, setCopyId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editingMsg, setEditingMsg] = useState("");
 
   useEffect(() => {
     const cancelTextToSpeech = () => {
@@ -50,6 +61,11 @@ function ChatPage() {
       setSpeakingId("");
     };
     cancelTextToSpeech();
+
+    const cancelEditing = () => {
+      setEditingId(null);
+    };
+    cancelEditing();
 
     if (!user || chatId === "new") {
       setMessages([]);
@@ -224,6 +240,91 @@ function ChatPage() {
     }
   };
 
+  const saveEditedMsg = async (message) => {
+    if (sending || !user?.uid || !message) return;
+
+    const trimmedMsg = editingMsg.trim();
+
+    if (!trimmedMsg) {
+      toast.error("Message cannot be empty.");
+      return;
+    }
+
+    if (trimmedMsg === message.content.trim()) {
+      toast.error("No changes were made.");
+      return;
+    }
+
+    const lastUserMessage = getLastUserMessage();
+
+    if (!lastUserMessage || lastUserMessage.id !== message.id) {
+      toast.error("Only the latest message can be edited.");
+      return;
+    }
+
+    const messageIndex = messages.findIndex((m) => m.id === message.id);
+    const assistantMessage = messages[messageIndex + 1];
+
+    if (!assistantMessage || assistantMessage.role !== "assistant") {
+      toast.error("The previous AI response could not be found.");
+      return;
+    }
+
+    setError(false);
+    setSending(true);
+
+    try {
+      const assistantMessageRef = doc(
+        db,
+        "users",
+        user.uid,
+        "conversations",
+        chatId,
+        "messages",
+        assistantMessage.id,
+      );
+
+      await deleteDoc(assistantMessageRef);
+
+      const userMessageRef = doc(
+        db,
+        "users",
+        user.uid,
+        "conversations",
+        chatId,
+        "messages",
+        message.id,
+      );
+
+      await updateDoc(userMessageRef, {
+        content: trimmedMsg,
+        createdAt: serverTimestamp(),
+      });
+
+      setEditingId(null);
+      setEditingMsg("");
+
+      await sendUserMessage({
+        uid: user.uid,
+        selectedTool,
+        setSelectedTool,
+        chatId,
+        message: trimmedMsg,
+        navigate,
+        setAnswering,
+        setSearching,
+        setCreatingImg,
+        retry: true,
+        selectedModel,
+      });
+    } catch (err) {
+      console.error("Failed to edit and regenerate message:", err);
+      setError(true);
+    } finally {
+      setSending(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-chat">
@@ -313,6 +414,16 @@ function ChatPage() {
                           onClick={() => regenerateMsg(message)}
                         />
                       )}
+                    {index === messages.length - 2 &&
+                      message.role === "user" && (
+                        <BiPencil
+                          className="edit-msg-btn"
+                          onClick={() => {
+                            setEditingId(message.id);
+                            setEditingMsg(message.content);
+                          }}
+                        />
+                      )}
                   </div>
                   <div
                     className={`bubble ${message.lang === "fa-IR" ? "fa-lang" : ""}`}
@@ -322,7 +433,41 @@ function ChatPage() {
                         Searched in {message.searchTime}s
                       </div>
                     )}
-                    <MarkdownRenderer content={message.content} />
+                    {message.id === editingId ? (
+                      <div className="edit-input-container">
+                        <input
+                          type="text"
+                          className="edit-msg-input"
+                          value={editingMsg}
+                          maxLength={8000}
+                          autoFocus
+                          placeholder="Message"
+                          disabled={sending}
+                          onChange={(e) => setEditingMsg(e.target.value)}
+                        />
+                        <div className="edit-msg-action-btn">
+                          <button
+                            className="edit-msg-save-btn"
+                            onClick={() => saveEditedMsg(message)}
+                            disabled={sending}
+                          >
+                            <FaCheck size={12} />
+                          </button>
+                          <button
+                            className="edit-msg-cancel-btn"
+                            onClick={() => {
+                              setEditingId(null);
+                              setEditingMsg("");
+                            }}
+                            disabled={sending}
+                          >
+                            <FaTimes size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <MarkdownRenderer content={message.content} />
+                    )}
                     {message.sources?.length > 0 && (
                       <span className="msg-sources">
                         {message.sources.map((s) => (
