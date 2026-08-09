@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BiLogOut, BiPencil, BiPlus, BiSearch, BiTrash } from "react-icons/bi";
 import "../styles/sideBar.css";
 
@@ -24,6 +24,21 @@ function SideBar({ menuOpen, setMenuOpen }) {
   const location = useLocation();
   const chatId = location.pathname.replace("/chat/", "");
   const navigate = useNavigate();
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setConversationMenuOpenId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const closeCovMenu = () => {
@@ -128,7 +143,7 @@ function SideBar({ menuOpen, setMenuOpen }) {
                 <HiDotsHorizontal size={15} />
               </button>
               {conversationMenuOpenId === chat.id && (
-                <div className="conversation-menu mono">
+                <div className="conversation-menu mono" ref={menuRef}>
                   <div
                     className="conversation-menu-edit-btn"
                     onClick={(e) => {

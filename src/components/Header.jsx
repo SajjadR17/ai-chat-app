@@ -4,7 +4,7 @@ import { IoChevronDown, IoChevronUp, IoClose } from "react-icons/io5";
 import { useAuth } from "../contexts/authContext";
 import { LuLogOut, LuUser } from "react-icons/lu";
 import { useAi } from "../contexts/aiContext";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Header({ menuOpen, setMenuOpen }) {
   const { user, userProfile } = useAuth();
@@ -23,6 +23,22 @@ function Header({ menuOpen, setMenuOpen }) {
     "llama-3.1-8b-instant": "Llama 3.1 8B",
     "qwen/qwen3.6-27b": "Qwen 3.6 27B",
   };
+
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setSelectModelMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header>
@@ -56,6 +72,7 @@ function Header({ menuOpen, setMenuOpen }) {
             </span>
           </div>
           <div
+            ref={menuRef}
             className="model-type-selector mono"
             onClick={() => setSelectModelMenuOpen((prev) => !prev)}
           >
