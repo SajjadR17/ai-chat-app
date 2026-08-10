@@ -159,6 +159,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
+        userProfile
       });
     } catch {
       setError(true);
@@ -207,6 +208,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
+        userProfile
       });
     } catch {
       setError(true);
@@ -316,6 +318,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
+        userProfile
       });
     } catch (err) {
       console.error("Failed to edit and regenerate message:", err);
@@ -565,7 +568,6 @@ function ChatPage() {
                       <LuRotateCw />
                       Retry
                     </button>
-                    or Change the Model.
                   </div>
                 </div>
               </div>

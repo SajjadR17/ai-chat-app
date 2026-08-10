@@ -117,13 +117,8 @@ aside {
   height: 24px;
   border: none;
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   border-radius: 4px;
-  cursor: pointer;
-}
-
-.conversation-menu-btn:hover {
-  background: var(--bg-card);
 }
 
 .conversation-menu {
@@ -182,15 +177,15 @@ aside {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: min(420px, 90%);
+  width: min(450px, 90%);
   transform: translate(-50%, -50%);
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
+  border-radius: 5px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
   z-index: 1000;
   animation: modalIn 0.18s ease;
@@ -203,9 +198,9 @@ aside {
 }
 
 .search-modal-close-btn {
-  border-radius: 6px;
-  height: 40px;
-  width: 40px;
+  border-radius: 5px;
+  height: 45px;
+  width: 45px;
   background: transparent;
   color: var(--text-primary);
   display: flex;
@@ -264,11 +259,14 @@ aside {
 
 .cancel-btn,
 .confirm-btn {
-  min-width: 90px;
   padding: 10px 18px;
-  border-radius: 6px;
+  border-radius: 5px;
   font-size: 14px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 100%;
   background: transparent;
   color: var(--text-primary);
@@ -289,35 +287,59 @@ aside {
   transform: scale(0.98);
 }
 
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-header button {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .edit-chat-title-input,
-.search-input {
+.search-input,
+.settings-field input,
+.settings-field textarea {
   width: 100%;
+  scrollbar-width: none;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 5px;
+  resize: none;
   padding: 11px 12px;
-  color: var(--text-primary);
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
   transition: all 0.2s ease;
 }
 
+.settings-field textarea {
+  height: 100px;
+}
+
 .edit-chat-title-input:hover,
-.search-input:hover {
+.search-input:hover,
+.settings-field input:hover,
+.settings-field textarea:hover {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
 .edit-chat-title-input:focus,
-.search-input:focus {
+.search-input:focus,
+.settings-field input:focus,
+.settings-field textarea:focus {
   outline: none;
 }
 
-.edit-input-err {
-  color: var(--danger);
-  margin: -10px 0;
-  animation: errorFade 0.15s ease;
-}
-
-.user-profile-card{
+.user-profile-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -325,13 +347,13 @@ aside {
   padding-top: 20px;
 }
 
-.user-profile-content{
+.user-profile-content {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.user-profile-avatar{
+.user-profile-avatar {
   padding: 5px;
   border-radius: 5px;
   display: flex;
@@ -341,16 +363,16 @@ aside {
   background-color: var(--bg-card);
 }
 
-.user-profile-info{
+.user-profile-info {
   display: flex;
   flex-direction: column;
 }
 
-.username{
+.username {
   font-size: 13px;
 }
 
-.user-role{
+.user-role {
   color: var(--text-secondary);
 }
 

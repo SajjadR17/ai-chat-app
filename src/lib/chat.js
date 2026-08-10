@@ -145,6 +145,7 @@ export const sendUserMessage = async ({
   setCreatingImg,
   retry,
   selectedModel,
+  userProfile,
 }) => {
   let currentChatId = chatId;
 
@@ -202,9 +203,15 @@ export const sendUserMessage = async ({
       setSearching?.(false);
       setAnswering?.(true);
 
-      data = await aiAnswer(message, history, searchData, selectedModel);
+      data = await aiAnswer(
+        message,
+        history,
+        searchData,
+        selectedModel,
+        userProfile,
+      );
     } else {
-      data = await aiAnswer(message, history, null, selectedModel);
+      data = await aiAnswer(message, history, null, selectedModel, userProfile);
     }
 
     if (chatId === "new" && route.title) {

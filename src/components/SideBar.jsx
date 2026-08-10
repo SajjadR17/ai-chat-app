@@ -11,12 +11,14 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import DeleteChatModal from "./DeleteChatModal";
 import EditChatModal from "./EditChatModal";
 import SearchModal from "./SearchModal";
-import { logout } from "../utils/auth";
+import { CiSettings } from "react-icons/ci";
+import SettingsModal from "./SettingsModal";
 
 function SideBar({ menuOpen, setMenuOpen }) {
   const [conversations, setConversations] = useState([]);
   const [conversationMenuOpenId, setConversationMenuOpenId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -185,10 +187,10 @@ function SideBar({ menuOpen, setMenuOpen }) {
               <span className="user-role mono">{userProfile.role}</span>
             </div>
           </div>
-          <BiLogOut
-            size={15}
+          <CiSettings
+            size={18}
+            onClick={() => setSettingsModalOpen((prev) => !prev)}
             color="var(--text-secondary)"
-            onClick={() => logout()}
             cursor={"pointer"}
           />
         </div>
@@ -212,6 +214,9 @@ function SideBar({ menuOpen, setMenuOpen }) {
           setMenuOpen={setMenuOpen}
           setSearchModalOpen={setSearchModalOpen}
         />
+      )}
+      {settingsModalOpen && (
+        <SettingsModal setSettingsModalOpen={setSettingsModalOpen} />
       )}
     </aside>
   );

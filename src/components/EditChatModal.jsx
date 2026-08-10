@@ -3,12 +3,12 @@ import { updateConversationTitle } from "../lib/chat";
 import { useAuth } from "../contexts/authContext";
 import { ClipLoader } from "react-spinners";
 import { createPortal } from "react-dom";
+import toast from "react-hot-toast";
 
 function EditChatModal({ chat, setEditModalOpen, setSelectedChat }) {
   const { user } = useAuth();
   const [editing, setEditing] = useState(false);
   const [editInputValue, setEditInputValue] = useState(chat.title || "");
-  const [error, setError] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -29,11 +29,11 @@ function EditChatModal({ chat, setEditModalOpen, setSelectedChat }) {
   const editHandler = async () => {
     const title = editInputValue.trim();
     if (!title) {
-      setError("Title required");
+      toast.error("Title required");
       return;
     }
     if (title === chat.title) {
-      setError("Title must be diffrent");
+      toast.error("Title must be diffrent");
       return;
     }
     setEditing(true);
@@ -57,14 +57,10 @@ function EditChatModal({ chat, setEditModalOpen, setSelectedChat }) {
           value={editInputValue}
           maxLength={40}
           spellCheck={false}
-          onChange={(e) => {
-            setEditInputValue(e.target.value);
-            setError("");
-          }}
+          onChange={(e) => setEditInputValue(e.target.value)}
           ref={inputRef}
           className="edit-chat-title-input"
         />
-        {error && <span className="edit-input-err mono">{error}</span>}
         <div className="modal-action-btns mono">
           <button
             className="cancel-btn"

@@ -29,7 +29,7 @@ function MessageInput({
   setSelectedTool,
 }) {
   const { chatId } = useParams();
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const { selectedModel } = useAi();
   const [message, setMessage] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -119,6 +119,7 @@ function MessageInput({
         setCreatingImg,
         retry: false,
         selectedModel,
+        userProfile,
       });
     } catch (err) {
       console.error(err);
