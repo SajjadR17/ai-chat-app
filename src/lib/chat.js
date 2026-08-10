@@ -105,7 +105,7 @@ const getConversationHistory = async (uid, chatId, limit) => {
 
 export const updateConversationTitle = async (uid, chatId, title) => {
   await updateDoc(doc(db, "users", uid, "conversations", chatId), {
-    title: title || "New Conversation",
+    title: title || "New Chat",
   });
 };
 

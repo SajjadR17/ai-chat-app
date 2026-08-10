@@ -31,7 +31,7 @@ export const searchWeb = async (query) => {
       results: data.results.map((item) => ({
         title: item.title,
         url: item.url,
-        content: item.content,
+        content: item.content.slice(0, 700),
       })),
     };
   } catch (error) {

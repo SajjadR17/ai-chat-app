@@ -367,6 +367,7 @@ always follow that intention.
 
   if (!response.ok) {
     const error = await response.text();
+    console.log(error)
 
     throw new Error(`Router error: ${error}`);
   }

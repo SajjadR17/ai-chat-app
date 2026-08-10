@@ -3,17 +3,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { ClipLoader } from "react-spinners";
 import { doc, onSnapshot } from "firebase/firestore";
-import { BsWifiOff } from "react-icons/bs";
 
 const AuthContext = createContext(undefined);
-
-const WATCHDOG_MS = 10000;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
-  const [authError, setAuthError] = useState("");
 
   useEffect(() => {
     let unsubscribeProfile = null;
@@ -28,7 +24,6 @@ export function AuthProvider({ children }) {
       }
 
       if (!currentUser) {
-        setAuthError("");
         setUserProfile(null);
         setCheckingAuth(false);
         return;
@@ -37,22 +32,11 @@ export function AuthProvider({ children }) {
       unsubscribeProfile = onSnapshot(
         doc(db, "users", currentUser.uid),
         (snap) => {
-          setAuthError("");
           setUserProfile(snap.exists() ? snap.data() : null);
           setCheckingAuth(false);
         },
         (error) => {
           console.error(error);
-
-          if (error.code === "unavailable") {
-            setAuthError("firebase-unreachable");
-          } else if (error.code === "permission-denied") {
-            setAuthError("permission-denied");
-            setUserProfile(null);
-          } else {
-            setAuthError("unknown-error");
-          }
-
           setCheckingAuth(false);
         },
       );
@@ -77,32 +61,13 @@ export function AuthProvider({ children }) {
     );
   }
 
-  if (authError === "firebase-unreachable") {
-    return (
-      <div className="app-no-internet-err">
-        <BsWifiOff size={40} color="var(--text-secondary)" />
-        <span className="mono" style={{ color: "var(--text-secondary)" }}>
-          Unable to connect to the server.
-          <br />
-          Please check your internet connection.
-          <br />
-          If Firebase is restricted in your region, you may need to use a VPN.
-        </span>
-      </div>
-    );
-  }
-
   return (
-    <AuthContext.Provider value={{ user, userProfile, authError }}>
+    <AuthContext.Provider value={{ user, userProfile }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (ctx === undefined) {
-    throw new Error("useAuth() must be used within an AuthProvider");
-  }
-  return ctx;
+  return useContext(AuthContext);
 }

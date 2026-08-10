@@ -35,8 +35,6 @@ html {
 
   --fs-body: 16px;
   --fs-mono: 11px;
-
-  --container-width: 1400px;
 }
 
 .body {
@@ -67,11 +65,6 @@ body {
   height: 100%;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-.container {
-  width: min(calc(100% - 40px), var(--container-width));
-  margin-inline: auto;
 }
 
 img,
