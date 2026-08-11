@@ -169,6 +169,7 @@ export const sendUserMessage = async ({
     setAnswering?.(true);
 
     const history = await getConversationHistory(uid, currentChatId, 6);
+    console.log(history)
 
     const route = await aiRouter(
       message,
