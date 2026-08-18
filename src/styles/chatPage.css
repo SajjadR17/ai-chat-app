@@ -162,6 +162,9 @@ main {
 }
 
 .bubble {
+  direction: ltr;
+  text-align: start;
+  unicode-bidi: plaintext;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-left: 2px solid var(--violet);
@@ -174,7 +177,7 @@ main {
   overflow-wrap: break-word;
 }
 
-.bubble.fa-lang {
+.bubble.rtl {
   direction: rtl;
 }
 
@@ -228,6 +231,7 @@ main {
   color: var(--text-muted);
   margin-bottom: 10px;
   direction: ltr;
+  text-align: left;
 }
 
 .bubble p {
@@ -278,6 +282,7 @@ main {
   border: 1px solid var(--border);
   padding: 2px 6px;
   margin: 0 5px;
+  text-align: left;
   border-radius: 5px;
   font-family: "JetBrains Mono", monospace;
   font-size: 13px;
@@ -285,6 +290,7 @@ main {
 
 .bubble pre {
   margin: 16px 0;
+  text-align: left;
   border-radius: 8px;
   overflow-x: auto;
   font-size: 13px;
@@ -308,7 +314,7 @@ main {
   color: var(--text-secondary);
 }
 
-.bubble.fa-lang blockquote {
+.bubble.rtl blockquote {
   border-left: none;
   border-right: 3px solid var(--accent-dim);
 }

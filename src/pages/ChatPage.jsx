@@ -159,7 +159,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
-        userProfile
+        userProfile,
       });
     } catch {
       setError(true);
@@ -208,7 +208,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
-        userProfile
+        userProfile,
       });
     } catch {
       setError(true);
@@ -318,7 +318,7 @@ function ChatPage() {
         setCreatingImg,
         retry: true,
         selectedModel,
-        userProfile
+        userProfile,
       });
     } catch (err) {
       console.error("Failed to edit and regenerate message:", err);
@@ -326,6 +326,14 @@ function ChatPage() {
     } finally {
       setSending(false);
     }
+  };
+
+  const getTextDirection = (text) => {
+    const firstStrongChar = text.match(/[\u0600-\u06FF]|[A-Za-z]/);
+
+    if (!firstStrongChar) return "ltr";
+
+    return /[\u0600-\u06FF]/.test(firstStrongChar[0]) ? "rtl" : "ltr";
   };
 
   if (loading) {
@@ -429,7 +437,7 @@ function ChatPage() {
                       )}
                   </div>
                   <div
-                    className={`bubble ${message.lang === "fa-IR" ? "fa-lang" : ""}`}
+                    className={`bubble ${getTextDirection(message.content)}`}
                   >
                     {message.searchTime && (
                       <div className="search-time mono">
