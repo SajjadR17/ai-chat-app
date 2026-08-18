@@ -151,7 +151,11 @@ function MessageInput({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
+            const isMobile = window.matchMedia("(pointer: coarse)").matches;
+
             if (e.key === "Enter" && !e.shiftKey) {
+              if (isMobile) return;
+
               e.preventDefault();
 
               if (message.trim() && !sending && !answering) {
