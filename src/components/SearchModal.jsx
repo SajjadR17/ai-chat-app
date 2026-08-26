@@ -60,7 +60,12 @@ function SearchModal({ setSearchModalOpen, setMenuOpen }) {
         className="modal-overlay"
         onClick={() => setSearchModalOpen(false)}
       ></div>
-      <div className="chat-modal">
+      <div
+        className="chat-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search conversations"
+      >
         <div className="search-modal-header">
           <input
             type="text"
@@ -72,6 +77,8 @@ function SearchModal({ setSearchModalOpen, setMenuOpen }) {
           />
           <button
             className="search-modal-close-btn"
+            aria-label="Close search"
+            title="Close search"
             onClick={() => setSearchModalOpen(false)}
           >
             <CgClose size={15} />
@@ -81,6 +88,7 @@ function SearchModal({ setSearchModalOpen, setMenuOpen }) {
           {displayConversations.map((c) => (
             <div
               className="search-modal-conversation-card"
+              key={c.id}
               onClick={() => {
                 navigate(`/chat/${c.id}`);
                 setSearchModalOpen(false);

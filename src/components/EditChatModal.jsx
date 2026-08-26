@@ -50,7 +50,12 @@ function EditChatModal({ chat, setEditModalOpen, setSelectedChat }) {
   return createPortal(
     <>
       <div className="modal-overlay" onClick={closeModal}></div>
-      <div className="chat-modal">
+      <div
+        className="chat-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Edit conversation title"
+      >
         <span className="modal-content">Edit Chat Title</span>
         <input
           type="text"

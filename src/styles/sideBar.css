@@ -258,7 +258,8 @@ aside {
 }
 
 .cancel-btn,
-.confirm-btn {
+.confirm-btn,
+.logout-btn {
   padding: 10px 18px;
   border-radius: 5px;
   font-size: 14px;
@@ -276,14 +277,16 @@ aside {
 
 .cancel-btn:hover,
 .confirm-btn:hover,
-.search-modal-close-btn:hover {
+.search-modal-close-btn:hover,
+.logout-btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
 }
 
 .confirm-btn:active,
 .cancel-btn:active,
-.search-modal-close-btn:active {
+.search-modal-close-btn:active,
+.logout-btn:active {
   transform: scale(0.98);
 }
 

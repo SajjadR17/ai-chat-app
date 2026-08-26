@@ -42,7 +42,6 @@ function App() {
         }}
       />
       {!user ? (
-        <>
           <Routes>
             <Route
               path="*"
@@ -51,7 +50,6 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
-        </>
       ) : (
         <div className="layout">
           <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />

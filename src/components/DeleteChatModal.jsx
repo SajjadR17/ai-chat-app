@@ -30,7 +30,12 @@ function DeleteChatModal({ chat, setDeleteModalOpen, setSelectedChat }) {
   return createPortal(
     <>
       <div className="modal-overlay" onClick={closeModal}></div>
-      <div className="chat-modal">
+      <div
+        className="chat-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Delete conversation"
+      >
         <span className="modal-content">Delete this conversation?</span>
         <div className="modal-action-btns mono">
           <button

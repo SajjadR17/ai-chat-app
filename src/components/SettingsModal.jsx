@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/authContext";
 import { db } from "../../firebase";
 import toast from "react-hot-toast";
 import { CgClose } from "react-icons/cg";
+import { logout } from "../utils/auth";
 
 function SettingsModal({ setSettingsModalOpen }) {
   const { user, userProfile } = useAuth();
@@ -79,10 +80,21 @@ function SettingsModal({ setSettingsModalOpen }) {
   return createPortal(
     <>
       <div className="modal-overlay" onClick={closeModal}></div>
-      <div className="chat-modal">
+      <div
+        className="chat-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Settings"
+      >
         <div className="settings-header">
           <h2>Settings</h2>
-          <button type="button" className="modal-close" onClick={closeModal}>
+          <button
+            type="button"
+            aria-label="Close-settings"
+            title="Close settings"
+            className="modal-close"
+            onClick={closeModal}
+          >
             <CgClose />
           </button>
         </div>
@@ -112,6 +124,9 @@ function SettingsModal({ setSettingsModalOpen }) {
             rows={5}
           />
         </div>
+        <button className="logout-btn" type="button" onClick={logout}>
+          Logout
+        </button>
         <div className="modal-action-btns">
           <button
             type="button"
