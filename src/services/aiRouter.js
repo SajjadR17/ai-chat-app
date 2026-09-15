@@ -19,7 +19,6 @@ Your ONLY job is to classify the user's message.
 
 Do NOT solve the user's request.
 Do NOT explain your decision.
-Do NOT analyze deeply.
 Never answer the user.
 Never explain your reasoning.
 Return ONLY valid JSON of these types : TEXT,IMAGE,SEARCH,BLOCKED
@@ -306,12 +305,14 @@ Use BLOCKED ONLY for requests involving:
 - child exploitation
 - encouragement of self-harm
 
+Explain why you can't answer in "answer"
+
 Return:
 
 {
 "type":"blocked",
 "title":"",
-"answer":"Sorry, I can't help with that request."
+"answer":"Your answer"
 }
 
 ==================================================
@@ -367,7 +368,7 @@ always follow that intention.
 
   if (!response.ok) {
     const error = await response.text();
-    console.log(error)
+    console.log(error);
 
     throw new Error(`Router error: ${error}`);
   }

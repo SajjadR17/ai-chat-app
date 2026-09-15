@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AiContext = createContext();
 
-const DEFAULT_MODEL = "openai/gpt-oss-120b";
+const DEFAULT_MODEL = "qwen/qwen3.6-27b";
 
 export const AiProvider = ({ children }) => {
   const [selectedModel, setSelectedModel] = useState(
