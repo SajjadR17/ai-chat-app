@@ -306,6 +306,7 @@ Use BLOCKED ONLY for requests involving:
 - encouragement of self-harm
 
 Explain why you can't answer in "answer"
+Explain in the same language as the user's latest message.
 
 Return:
 
