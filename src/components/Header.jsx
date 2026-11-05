@@ -14,14 +14,14 @@ function Header({ menuOpen, setMenuOpen }) {
     { name: "openai/gpt-oss-120b", power: "Best Quality" },
     { name: "openai/gpt-oss-20b", power: "Fast Response" },
     { name: "llama-3.1-8b-instant", power: "Fastest" },
-    { name: "qwen/qwen3.6-27b", power: "Coding" },
+    { name: "qwen/qwen3.8-27b", power: "Coding" },
   ];
 
   const modelNames = {
     "openai/gpt-oss-120b": "GPT OSS 120B",
     "openai/gpt-oss-20b": "GPT OSS 20B",
     "llama-3.1-8b-instant": "Llama 3.1 8B",
-    "qwen/qwen3.6-27b": "Qwen 3.6 27B",
+    "qwen/qwen3.8-27b": "Qwen 3.8 27B",
   };
 
   const menuRef = useRef(null);
